@@ -16,7 +16,9 @@ docker container run -d --name tercen_studio \
 ```
 
 Open chrome [http://localhost:8787/](http://localhost:8787/)
+
 Username : rstudio
+
 Password : tercen
 
 # Build
