@@ -3,7 +3,7 @@
 Inside a terminal run the following
 
 ```bash
-git clone 
+git clone https://github.com/tercen/tercen_studio
 cd tercen_studio
 
 docker container run -d --name tercen_studio \
@@ -16,7 +16,8 @@ docker container run -d --name tercen_studio \
 ```
 
 Open chrome [http://localhost:8787/](http://localhost:8787/)
-
+Username : rstudio
+Password : tercen
 
 # Build
 
