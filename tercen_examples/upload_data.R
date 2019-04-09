@@ -1,16 +1,14 @@
 library(tercen)
 
-serviceUri="https://dev.tercen.com/api/v1/"
-username="username"
-password="password"
+options("tercen.serviceUri"= "https://dev.tercen.com/api/v1/")
+options("tercen.username"= "username")
+options("tercen.password"= "password")
 
 filename = '~/tercen_examples/crabs-long.csv'
 teamName = 'myteam'
 projectName = 'myproject'
 
-client = TercenClient$new(serviceUri=serviceUri,
-    username=username,
-    password=password)
+client = TercenClient$new()
 
 projects = client$documentService$findProjectByOwnersAndCreatedDate(
     startKey=list(teamName,'2020'),
