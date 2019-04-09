@@ -41,7 +41,7 @@ RUN set -eux; \
 
 
 RUN R -e "devtools::install_github('tercen/TSON', ref = '1.4.4-rtson', subdir='rtson', upgrade_dependencies = FALSE, args='--no-multiarch')" \
-    R -e "devtools::install_github('tercen/teRcen', ref = '0.8.4', upgrade_dependencies = FALSE, args='--no-multiarch')"
+    R -e "devtools::install_github('tercen/teRcen', ref = '0.7.1', upgrade_dependencies = FALSE, args='--no-multiarch')"
 
 RUN  R -e "install.packages('packrat')"
 

@@ -8,7 +8,7 @@ docker container run -d --name tercen_studio \
  -e PASSWORD=tercen \
  -v ${PWD}/rstudio/home:/home/rstudio/home \
  -w /home/rstudio \
- tercen/tercen_studio:0.8.4
+ tercen/tercen_studio:0.7.1
 ```
 
 Open chrome [http://localhost:8787/](http://localhost:8787/)
@@ -21,8 +21,8 @@ Password : tercen
 
 ```bash
 
-docker build -t tercen/tercen_studio:0.8.4 .
-docker push tercen/tercen_studio:0.8.4
+docker build -t tercen/tercen_studio:0.7.1 .
+docker push tercen/tercen_studio:0.7.1
 
 
 ```
