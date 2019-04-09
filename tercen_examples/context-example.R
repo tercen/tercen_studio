@@ -5,37 +5,17 @@ options("tercen.serviceUri"= "https://dev.tercen.com/api/v1/")
 options("tercen.username"= "username")
 options("tercen.password"= "password")
 
-options("tercen.workflowId"= "9d5379a435c8457a347584e162003e09")
+# https://dev.tercen.com/core/#ds/6d5568907eb0e316ef6e1c59737a0939/12-9
+options("tercen.workflowId"= "6d5568907eb0e316ef6e1c59737a0939")
 options("tercen.stepId"= "12-9")
 
 ctx = tercenCtx()
+
 ctx$names
- 
-
-(ctx = tercenCtx()) %>% select()
-tercenCtx()$query
-tercenCtx()$select()
-tercenCtx()$rschema
-tercenCtx()$cschema
-tercenCtx()$workflow
-tercenCtx()$workflow
-
-rbenchmark::benchmark("workflow"= {
-  tercenCtx()$workflow
-}, 
-"select"= {
-  tercenCtx()$select()
-}, 
-replications = 1,
-columns = c("test", "replications", "elapsed",
-            "relative", "user.self", "sys.self"))
-
-
-ctx %>% select()
-ctx %>% cselect()
-ctx = tercenCtx()
-
-ctx
+ctx$query
+ctx$rschema
+ctx$cschema
+ctx$workflow
 
 ctx$namespace
 ctx$query
@@ -44,6 +24,10 @@ ctx$xAxis
 ctx$colors
 ctx$labels
 ctx$errors
+
+ctx %>% select()
+ctx %>% cselect()
+ctx %>% rselect()
 
 ctx$op.value('scale')
 
