@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:3.3.3
+FROM rocker/tidyverse:3.5.3
 
 COPY sources.list /etc/apt/sources.list
 
@@ -46,3 +46,4 @@ RUN R -e "devtools::install_github('tercen/TSON', ref = '1.4.4-rtson', subdir='r
 RUN  R -e "install.packages('packrat')"
 
 COPY tercen_examples/ /home/rstudio/tercen_examples/
+RUN  chown -R rstudio:rstudio /home/rstudio/tercen_examples/
