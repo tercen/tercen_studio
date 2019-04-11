@@ -26,9 +26,6 @@ docker rm -f tercen_studio
 # Build
 
 ```bash
-
 docker build -t tercen/tercen_studio:0.7.1.3 .
 docker push tercen/tercen_studio:0.7.1.3
-
-
 ```
