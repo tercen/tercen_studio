@@ -1,0 +1,44 @@
+version: "3.2"
+services:
+
+  couchdb:
+    image: couchdb:1.7.2
+    env_file:
+      - config/env/couchdb.env
+    volumes:
+      - couchdb-data:/usr/local/var/lib/couchdb
+      - ./config/couchdb:/usr/local/etc/couchdb/local.d
+    restart: always
+
+  tercen:
+    links:
+      - couchdb
+    image: tercen/tercen:dev
+    ports:
+      - "5402:5400"
+      - "54000-55000:54000-55000"
+    env_file:
+      - config/env/couchdb.env
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - ./config/tercen:/etc/tercen
+    restart: always
+
+  tercen_studio:
+    links:
+      - tercen
+    image: tercen/tercen_studio:0.8.6.0
+    ports:
+      - "8787:8787"
+    environment:
+      - PASSWORD=tercen
+    volumes:
+      - tercen-studio-data:/home/rstudio
+      - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
+      - ./config/tercen-studio/examples:/home/rstudio/examples
+    restart: always
+
+volumes:
+  couchdb-data:
+  tercen-data:
+  tercen-studio-data:

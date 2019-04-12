@@ -1,15 +1,13 @@
 library(tercen)
 library(dplyr)
-
-options("tercen.serviceUri"= "https://dev.tercen.com/api/v1/")
-options("tercen.username"= "username")
-options("tercen.password"= "password")
-
-# https://dev.tercen.com/core/#ds/6d5568907eb0e316ef6e1c59737a0939/12-9
-options("tercen.workflowId"= "6d5568907eb0e316ef6e1c59737a0939")
-options("tercen.stepId"= "12-9")
+  
+# http://127.0.0.1:5402/#ds/642ef388cf12e36d5b9cbf5361004dab/4-2
+options("tercen.workflowId"= "642ef388cf12e36d5b9cbf5361004dab")
+options("tercen.stepId"= "4-2")
 
 ctx = tercenCtx()
+
+ctx$client$session$serverVersion
 
 ctx$names
 ctx$query
