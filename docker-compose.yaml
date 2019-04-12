@@ -16,7 +16,6 @@ services:
     image: tercen/tercen:dev
     ports:
       - "5402:5400"
-      - "54000-55000:54000-55000"
     env_file:
       - config/env/couchdb.env
     volumes:
