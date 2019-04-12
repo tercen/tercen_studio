@@ -26,7 +26,7 @@ Username : admin
 
 Password : admin
 
-Go to [http://127.0.0.1:8787/](http://localhost:8787/) to access RStudio.
+Go to [http://127.0.0.1:8787/](http://127.0.0.1:8787/) to access RStudio.
  
 Username : rstudio
 
