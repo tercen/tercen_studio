@@ -26,7 +26,7 @@ services:
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:0.8.6.0
+    image: tercen/tercen_studio:0.8.8.0
     ports:
       - "8787:8787"
     environment:

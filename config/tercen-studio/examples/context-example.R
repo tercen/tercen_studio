@@ -26,6 +26,7 @@ ctx$errors
 ctx %>% select()
 ctx %>% cselect()
 ctx %>% rselect()
+ctx %>% as.matrix()
 
 ctx$op.value('scale')
 
