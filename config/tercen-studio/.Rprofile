@@ -1,7 +1,12 @@
-options("tercen.serviceUri"="http://tercen:5400/api/v1/")
-options("tercen.username"="admin")
-options("tercen.password"="admin")
+# following options are defined in
+# /usr/local/lib/R/etc/Rprofile.site
 
+# options("tercen.serviceUri"="http://tercen:5400/api/v1/")
+# options("tercen.username"="admin")
+# options("tercen.password"="admin")
+
+#######################################
+## example
 # options("tercen.serviceUri"="http://172.17.0.1:5400/api/v1/")
 
 # options("tercen.serviceUri"= "https://dev.tercen.com/api/v1/")

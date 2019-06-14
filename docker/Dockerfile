@@ -25,10 +25,14 @@ RUN apt-get remove -y curl && \
     rm curl-7.58.0.tar.gz
 
 
+RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site
+
 USER rstudio
 
 RUN R -e "install.packages('packrat')"
 
-RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.8.8', upgrade_dependencies = TRUE, args='--no-multiarch')"
+RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.8.16', upgrade_dependencies = TRUE, args='--no-multiarch')"
 
 USER root

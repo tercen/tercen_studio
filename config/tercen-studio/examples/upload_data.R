@@ -43,4 +43,8 @@ task
 if (inherits(task$state, 'FailedState')){
     stop(task$state$reason)
 }
+
 # client$taskService$get(task$id)
+
+# browse
+# paste0("http://127.0.0.1:5402/#sch/", task$schemaId)
