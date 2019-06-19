@@ -17,7 +17,7 @@ Activate shared drives (Windows and Mac only)
 Then start tercen ...
 
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
 Go to [http://127.0.0.1:5402](http://127.0.0.1:5402) to access Tercen.
