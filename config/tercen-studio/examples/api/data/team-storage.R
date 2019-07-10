@@ -1,7 +1,5 @@
 library(tercen)
 
-options("tercen.serviceUri"="http://172.17.0.1:5400/api/v1/")
-
 client = TercenClient$new()
 client$session
 client$session$user$id
