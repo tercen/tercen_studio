@@ -33,6 +33,17 @@ USER rstudio
 
 RUN R -e "install.packages('packrat')"
 
-RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.8.16', upgrade_dependencies = TRUE, args='--no-multiarch')"
+RUN R -e "install.packages(c('Rtsne', 'randomForest', 'ranger'))"
+
+RUN R -e "devtools::install_github('JinmiaoChenLab/ClusterX')"
+RUN R -e "install.packages(c('rbenchmark'))"
+RUN R -e "install.packages('lme4')"
+RUN R -e "install.packages('shinyjs')"
+
+RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.0', upgrade_dependencies = TRUE, args='--no-multiarch')"
+
+
+
+
 
 USER root
