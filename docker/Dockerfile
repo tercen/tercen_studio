@@ -33,9 +33,10 @@ USER rstudio
 
 RUN R -e "install.packages('packrat')"
 
-RUN R -e "install.packages(c('Rtsne', 'randomForest', 'ranger'))"
+RUN R -e "install.packages(c('remotes', 'Rtsne', 'randomForest', 'ranger'))"
 
-RUN R -e "devtools::install_github('JinmiaoChenLab/ClusterX')"
+RUN R -e "remotes::install_github('rstudio/renv@0.7.1-17')"
+RUN R -e "remotes::install_github('JinmiaoChenLab/ClusterX')"
 RUN R -e "install.packages(c('rbenchmark'))"
 RUN R -e "install.packages('lme4')"
 RUN R -e "install.packages('shinyjs')"
@@ -43,7 +44,7 @@ RUN R -e "install.packages('shinyjs')"
 RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.1', upgrade_dependencies = TRUE, args='--no-multiarch')"
 
 
-
+RUN R -e "renv::consent(provided = TRUE)"
 
 
 USER root
