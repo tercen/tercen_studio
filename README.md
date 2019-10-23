@@ -33,16 +33,19 @@ Username : rstudio
 Password : tercen
 
 
-To update tercen
+# Update
 
 ```bash
+# stop tercen_studio
+docker-compose down        
+# get tercen_studio latest version           
 git pull
-docker-compose down
 docker-compose pull
+# start tercen_studio
 docker-compose up -d
 ```
 
-To uninstall
+# Uninstall
 
 ```bash
 docker-compose down
@@ -53,9 +56,8 @@ docker volume rm tercen_studio_couchdb-data
 docker volume rm tercen_studio_tercen-data
 docker volume rm tercen_studio_tercen-studio-data
 ```
- 
 
-# Build tercen_studio
+# Build
 
 ```bash
 cd docker
