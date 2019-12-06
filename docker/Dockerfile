@@ -27,7 +27,8 @@ RUN apt-get remove -y curl && \
 
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
-    echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site
+    echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site
 
 USER rstudio
 
@@ -42,9 +43,6 @@ RUN R -e "install.packages('lme4')"
 RUN R -e "install.packages('shinyjs')"
 
 RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.1', upgrade_dependencies = TRUE, args='--no-multiarch')"
-
-
-RUN R -e "renv::consent(provided = TRUE)"
 
 
 USER root
