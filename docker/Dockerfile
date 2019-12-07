@@ -7,8 +7,9 @@ RUN echo "PATH=/home/rstudio/.cargo/bin:${PATH}" >> /usr/local/lib/R/etc/Renviro
 
 USER rstudio
 WORKDIR /home/rstudio
+RUN echo "rust version 1.39.0 (4560ea788 2019-11-04)"
 
-RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y
+RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y -q
 
 USER root
 
