@@ -43,7 +43,7 @@ RUN R -e "install.packages(c('rbenchmark'))"
 RUN R -e "install.packages('lme4')"
 RUN R -e "install.packages('shinyjs')"
 
-RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.1', upgrade_dependencies = TRUE, args='--no-multiarch')"
+RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.3', upgrade_dependencies = TRUE, args='--no-multiarch')"
 
 
 USER root
