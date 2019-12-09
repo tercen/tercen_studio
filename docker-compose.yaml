@@ -27,18 +27,20 @@ services:
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:0.9.2.2
+    image: tercen/tercen_studio:0.9.2.6
     ports:
       - "8787:8787"
     environment:
       - PASSWORD=tercen
     volumes:
-      - tercen-studio-data:/home/rstudio
+      - tercen-studio-renv:/home/rstudio/.local/share/renv
+      - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
-      - ./config/tercen-studio/examples:/home/rstudio/examples
+      - ./config/tercen-studio/examples:/home/rstudio/projects/examples
     restart: always
 
 volumes:
   couchdb-data:
   tercen-data:
   tercen-studio-data:
+  tercen-studio-renv:

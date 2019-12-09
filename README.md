@@ -55,13 +55,14 @@ docker volume ls
 docker volume rm tercen_studio_couchdb-data
 docker volume rm tercen_studio_tercen-data
 docker volume rm tercen_studio_tercen-studio-data
+docker volume rm tercen_studio_tercen-studio-renv
 ```
 
 # Build
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:0.9.2.3 .
+docker build -t tercen/tercen_studio:0.9.2.6 .
 docker history --no-trunc tercen_studio:0.9.2.3 
-docker push tercen/tercen_studio:0.9.2.3
+docker push tercen/tercen_studio:0.9.2.6
 ```
