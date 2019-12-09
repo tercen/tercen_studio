@@ -52,3 +52,5 @@ RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.3', upgrade_depen
 RUN mkdir -p /home/rstudio/.local/share/renv
 
 USER root
+
+VOLUME /home/rstudio/.local/share/renv
