@@ -61,7 +61,7 @@ docker volume rm tercen_studio_tercen-studio-data
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:0.9.2.2 .
-docker history --no-trunc tercen_studio:0.9.2.2 
-docker push tercen/tercen_studio:0.9.2.2
+docker build -t tercen/tercen_studio:0.9.2.3 .
+docker history --no-trunc tercen_studio:0.9.2.3 
+docker push tercen/tercen_studio:0.9.2.3
 ```

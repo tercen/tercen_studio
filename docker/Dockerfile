@@ -1,5 +1,10 @@
 FROM rocker/tidyverse:3.5.3
 
+# Global site-wide config -- neeeded for building packages
+RUN mkdir -p $HOME/.R/ \
+    && echo "MAKE=make -j8\n" >> $HOME/.R/Makevars
+
+
 RUN apt-get install -y curl && curl --version
 
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
