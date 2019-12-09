@@ -1,10 +1,5 @@
 FROM rocker/tidyverse:3.5.3
 
-# Global site-wide config -- neeeded for building packages
-RUN mkdir -p $HOME/.R/ \
-    && echo "MAKE=make -j8\n" >> $HOME/.R/Makevars
-
-
 RUN apt-get install -y curl && curl --version
 
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
@@ -12,6 +7,10 @@ RUN echo "PATH=/home/rstudio/.cargo/bin:${PATH}" >> /usr/local/lib/R/etc/Renviro
 
 USER rstudio
 WORKDIR /home/rstudio
+# Global site-wide config -- neeeded for building packages
+RUN mkdir -p /home/rstudio/.R/ \
+    && echo "MAKE=make -j8\n" >> /home/rstudio/.R/Makevars
+
 RUN echo "rust version 1.39.0 (4560ea788 2019-11-04)"
 
 RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y -q
