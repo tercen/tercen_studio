@@ -49,5 +49,6 @@ RUN R -e "install.packages('shinyjs')"
 
 RUN R -e "devtools::install_github('tercen/teRcen', ref = '0.9.3', upgrade_dependencies = TRUE, args='--no-multiarch')"
 
+RUN mkdir -p /home/rstudio/.local/share/renv
 
 USER root
