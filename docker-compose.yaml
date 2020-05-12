@@ -13,8 +13,8 @@ services:
   tercen:
     links:
       - couchdb
-    image: tercen/tercen:0.4.52-server
-#    image: tercen/tercen:latest
+#    image: tercen/tercen:0.4.52-server
+    image: tercen/tercen:latest
     ports:
       - "5402:5400"
     env_file:

@@ -1,9 +1,9 @@
 library(tercen)
 library(dplyr)
 
-# http://127.0.0.1:5402/#ds/2ecef2b0b686d7fde25f34eeb8005605/6-3
-options("tercen.workflowId"= "2ecef2b0b686d7fde25f34eeb8005605")
-options("tercen.stepId"= "6-3")
+# b6cb5a7da1470bd088032dd09e00bff0/ds/96a905f1-3d1a-4274-8f4f-cc42751e7b0c
+options("tercen.workflowId"= "b6cb5a7da1470bd088032dd09e00bff0")
+options("tercen.stepId"= "96a905f1-3d1a-4274-8f4f-cc42751e7b0c")
 
 ctx = tercenCtx()
 
