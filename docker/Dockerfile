@@ -63,4 +63,6 @@ RUN mkdir -p /home/rstudio/.local/share/renv
 
 USER root
 
+RUN adduser rstudio sudo
+
 VOLUME /home/rstudio/.local/share/renv
