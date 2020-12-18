@@ -18,7 +18,7 @@ services:
     image: tercen/tercen:latest
     ports:
       - "5402:5400"
-    environment:
+#    environment:
 # needed for docker operators, 172.17.0.1 is the default docker gateway
 #      - tercen.public.client.uri=http://172.17.0.1:5402
 #      - tercen.worker.public.ip=172.17.0.1
