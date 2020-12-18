@@ -41,8 +41,11 @@ eksctl utils associate-iam-oidc-provider --region eu-west-1 --cluster martin18 -
 ## 3. Create IAM policy for Load Balancer
 A copy of this policy has been included in this GitHub repository. If an updated policy is needed the link is included below.
 
+```bash
 Download Policy
 curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/main/docs/install/iam_policy.json)
+
+```
 
 #### Command
 aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam-policy.json
@@ -56,40 +59,55 @@ arn:aws:iam::334845943767:policy/AWSLoadBalancerControllerIAMPolicy
 ## 4. Create IAM Role and Service Account for cluster
 
 #### Command
+
+```bash
 eksctl create iamserviceaccount --cluster=$CLUSTER_NAME --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=$ALB_POLICY --approve
 e.g
 eksctl create iamserviceaccount --cluster=martin18 --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::334845943767:policy/AWSLoadBalancerControllerIAMPolicy --approve
-
+```
 
 ## 5. Install Cert Manager to cluster
 
 #### Command
-kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml
 
+
+```bash
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml
+```
 
 ## 6. Apply Load Balancer Controller Service Yaml
 Before applying the next command you must edit the v2_0_0_full.yaml file to have your current cluster name 
 Search in the fole for the following line. [--cluster-name=<clustername>]) and change <clustername> to be $CLUSTER_NAME
 
 #### Command
+
+```bash
 kubectl apply -f v2_0_0_full.yaml
+
+``````
 
 
 ## 7. Check the Deployment
 Note ALB takes some time to deploy and may return no values for the first few minutes.
 
 #### Command
+```bash
 kubectl get pods --all-namespaces
+
+``````
 
 Copy load balancer controller name to a text file. It will be used in a later command under the variable $LOAD_BALANCER
 e.g
 aws-load-balancer-controller-556f9b8d97-kckqk
 
 #### Command
+
+```bash
 kubectl logs $LOAD_BALANCER -n kube-system
-e.g
+# e.g
 kubectl logs aws-load-balancer-controller-556f9b8d97-kckqk -n kube-system
-    
+``````
+ 
 You can check each line is an "info" line and there are no "error" lines.
 
 
@@ -101,37 +119,53 @@ You can check each line is an "info" line and there are no "error" lines.
 A copy of this policy has been included in this GitHub repository. If an updated policy is needed the link is included below.
 
 Download Policy
+
+```bash
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-ebs-csi-driver/v0.4.0/docs/example-iam-policy.json)
+```
 
 #### Command
-aws iam create-policy --policy-name Amazon_EBS_CSI_Driver --policy-document file://example-iam-policy.json
 
+```bash
+aws iam create-policy --policy-name Amazon_EBS_CSI_Driver --policy-document file://example-iam-policy.json
+```
 From the text output by the terminal copy the Policy ARN to a text file. I will be used in a later command under the variable $EBS_POLICY. 
 You can also copy it from the AWS Control Panel.
 e.g
 arn:aws:iam::334845943767:policy/Amazon_EBS_CSI_Driver
 
 ## 9. Attach policy to NodeInstanceRole
-eksctl has created a NodeInstanceRole for the cluster. You must copy the node name to a text file. It will be used in a later command under the variable $NODE_NAME. The node name can be found on the AWS Control Panel under IAM > Roles. Enter "node" in the search box. You will find the role ARN, which contains the node name.
+eksctl has created a NodeInstanceRole for the cluster. 
+You must copy the node name to a text file. 
+It will be used in a later command under the variable $NODE_NAME. 
+The node name can be found on the AWS Control Panel under IAM > Roles. 
+Enter "node" in the search box. You will find the role ARN, which contains the node name.
 
 e.g. 
 Role ARN = arn:aws:iam::334845943767:role/**eksctl-martin18-nodegroup-ng-1518-NodeInstanceRole-PHM92HFNFP6U**
+
+```bash
 $NODE_NAME = eksctl-martin18-nodegroup-ng-1518-NodeInstanceRole-PHM92HFNFP6U
+```
 
 #### Command
+
+```bash
 aws iam attach-role-policy --policy-arn $EBS_POLICY --role-name NODE_NAME
 
-e.g
+# e.g
 aws iam attach-role-policy --policy-arn arn:aws:iam::334845943767:policy/Amazon_EBS_CSI_Driver --role-name eksctl-martin18-nodegroup-ng-1518-NodeInstanceRole-PHM92HFNFP6U
-
+```
 The terminal will give no output message but success can be checked on the AWS Control Panel at IAM > Policies > Amazon_EBS_CSI_Driver > Policy Usage)
 You will see the $NODE_NAME attached here.
 
 ## 10. Deploy Amazon EBS CSI driver
 
 #### Command
-kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
+```bash
+kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
+```
 
 ----
 ## Install CouchDB
@@ -139,28 +173,38 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernete
 ## 11. Create Persistant Volume Claim on EBS
 
 #### Command
-kubectl apply -f couchdb-pv-claim-stage.yaml
 
+```bash
+kubectl apply -f couchdb-pv-claim-stage.yaml
+```
 
 ## 12. Create Couchdb Service & Deployment
 
 #### Command
-kubectl apply -f couchdb-stage.yaml
 
+```bash
+kubectl apply -f couchdb-stage.yaml
+```
 
 ## 13. Test CouchDB install 
 This test will use port forwarding to open a connection between a browser on your localhost and the admin console panel of Couchdb 
 
 #### Command
+
+```bash
 kubectl get pods
+
+```
 Copy the couchdb pod name to a text file. It will be used in a later command under the variable $COUCHDB_POD.
 e.g
 couchdb-stage-789d9d4b6d-zwd5v
 
 #### Command
+```bash
 kubectl port-forward $COUCHDB_POD 5984:5984
-e.g
+# e.g
 kubectl port-forward couchdb-stage-789d9d4b6d-zwd5v 5984:5984
+```
 
 Copy the IP address of the local host port to a text file as the variable $PTFWD_COUCHDB.
 e.g
@@ -182,46 +226,63 @@ You will see the couchdb control panel. Return to the terminal where Ctrl+C will
 ## 14. Create Tercen Service
 
 #### Command
+
+```bash
 kubectl apply -f tercen-stage-service.yaml
 
 
 ## 15. Configure Tercen base settings.
 
 #### Command
-kubectl create configmap tercen-staging-config --from-file=config.yaml=tercen-staging-config.yaml -o yaml --dry-run >> tercen-staging-config.yaml.run
+
+```bash
+kubectl create configmap tercen-staging-config --from-file=config.yaml=tercen-staging-config.yaml -o yaml --dry-run >> tercen-staging-k8s-config.yaml
 
 #### Command
-kubectl apply -f tercen-staging-config.yaml.run
+
+```bash
+kubectl apply -f tercen-staging-k8s-config.yaml
+```
 
 Tercens default passwords may be retreived from the file for first use.
 #### Command
-kubectl describe configmaps tercen-staging-config
 
+```bash
+kubectl describe configmaps tercen-staging-config
+```
 
 ## 16. Create Tercen Persistant Volume Claim
 
 #### Command
-kubectl apply -f tercen-pv-claim-stage.yaml
 
+```bash
+kubectl apply -f tercen-pv-claim-stage.yaml
+```
 
 ## 17. deploy Tercen
-kubectl apply -f tercen-stage-deployment.yaml
 
+```bash
+kubectl apply -f tercen-stage-deployment.yaml
+```
 
 ## 18. Test Tercen install.
 This test will use port forwarding to open a connection between a browser on your localhost and the sign-in page of Tercen.
 
 #### Command
+
+```bash
 kubectl get pods
 Copy the Tercen pod name to a text file. It will be used in a later command under the variable $TERCEN_POD.
 e.g
 tercen-stage-deployment-6cd88ff877-9plwz
-
+```
 #### Command
+
+```bash
 kubectl port-forward $TERCEN_POD 5400:5400
 e.g
 kubectl port-forward tercen-stage-deployment-6cd88ff877-9plwz 5400:5400
-
+```
 Copy the IP address of the local host port to a text file as the variable $PTFWD_TERCEN
 e.g
 127.0.0.1:5984
@@ -239,8 +300,10 @@ You will see the Tercen sign-in page. Return to the terminal where Ctrl+C will q
 ## 19. Create Tercen ingress to the Load Balancer
 
 #### Command
-kubectl apply -f tercen-ingress.yaml
 
+```bash
+kubectl apply -f tercen-ingress.yaml
+```
 
 ## 20. Connect to Tercen Install.
 
