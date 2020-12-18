@@ -22,19 +22,22 @@ This will create a cluster with defaul two M5.large nodes. They will deploy into
 If you wish to change this see eksctl documentation for configuration properties options. 
 
 #### Command
+```bash
 **_eksctl create cluster --name $CLUSTER_NAME --region $AWS_REGION_**
-e.g
+# e.g
 eksctl create cluster --name martin18 --region eu-west-1
-
+```
 
 ## 2. Create IAM OIDC provider for your cluster
 
 #### Command
+
+```bash
 **_eksctl utils associate-iam-oidc-provider --region $AWS_REGION --cluster $CLUSTER_NAME --approve_**
-e.g
+# e.g
 eksctl utils associate-iam-oidc-provider --region eu-west-1 --cluster martin18 --approve
 
-
+```
 ----
 ## Set up Load Balancer
 
