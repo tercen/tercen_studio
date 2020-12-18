@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchdb-stage
+  labels:
+    app: couchdb-stage
+spec:
+  ports:
+    - port: 5984
+  selector:
+    app: couchdb-stage
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb-stage
+  labels:
+    app: couchdb-stage
+spec:
+  selector:
+    matchLabels:
+      app: couchdb-stage
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: couchdb-stage
+    spec:
+      containers:
+        - image: couchdb:1.7.2
+          name: couchdb-stage
+          env:
+            - name: COUCHDB_USER
+              value: admin
+            - name: COUCHDB_PASSWORD
+              value: admin
+            - name: ERL_FLAGS
+              value: "+A 4"
+          ports:
+            - containerPort: 5984
+              name: couchdb-stage
+          volumeMounts:
+            - name: couchdb-data
+              mountPath: /usr/local/var/lib/couchdb
+      volumes:
+        - name: couchdb-data
+          persistentVolumeClaim:
+            claimName: couchdb-stage-pv-claim
