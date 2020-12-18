@@ -232,7 +232,7 @@ You will see the couchdb control panel. Return to the terminal where Ctrl+C will
 
 ```bash
 kubectl apply -f tercen-stage-service.yaml
-
+```
 
 ## 15. Configure Tercen base settings.
 
