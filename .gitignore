@@ -1,3 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 /docker-compose-dev.yaml
+/config/tercen-studio/examples/data/melanoma_3_new.fcs
