@@ -1,127 +1,111 @@
 # Install Tercen on Microsoft AKS Cluster
 This instruction uses the Cloud Shell function in Azure. 
+
 The cloud shell has most of the CLI resources (such as kubectl) pre-loaded.
 
 Tutorial:
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 
 
-Some commands have variables where you will have to name objects such as your cluster and then use that name in sunsequent commands
+Some commands have variables where you will have to name objects such as your cluster and then use that name in subsequent commands
 
 The variables are represented in this text with a $. 
 
-e.g
+e.g.
 $VARIABLE
 
 It is advisable that you save your variable names into a text file for use in commands.
 
 ----
 
-
 ## 1. Create a Resource Group to hold the cluster.
 
 To list the Azure Region Names and choose the one nearest your location
 
 #### Command
+```Bash
 az account list-locations -o table
+```
 
 #### Command
+```Bash
 az group create --name $RESOURCE NAME --location $REGION NAME
+```
 
-e.g
+e.g.
+```Bash
 az group create --name myResourceGroup --location northeurope
+```
 
-
-----
-
-
-## 4. Set active GCP Zone in Command Line
+## 2. Register to Container Monitoring Service (Optional)
+This will send cluster health and load monitoring information to the Azure Monitor Dashboard.
 
 #### Command
 ```Bash
-gcloud config set compute/zone {zone}
+az provider register --namespace Microsoft.OperationsManagement
+
+az provider register --namespace Microsoft.OperationalInsights
 ```
 
-e.g..
-```Bash
-gcloud config set compute/zone europe-west2-a
-```
-
-## 5. Set ProjectID
+## 3. Create AKS Cluster
+This will create a cluster with a single worker node in two. You can adjust the variables in the command to configure the cluster to your own specification. See Azure documentation for instructions. 
 
 #### Command
 ```Bash
-export PROJECT_ID={project-id}
-```
-
-```Bash
-e.g.
-export PROJECT_ID=martin1-296614
-```
-
-## 6. Upload Tercen manifest files to Cloud Sheel Session
-```Bash
-git clone https://github.com/GoogleCloudPlatform/kubernetes-engine-samples
-```
-
-(change to tercen files)
-
-## 7. Go to tutorial directory
-
-```Bash
-cd kubernetes-engine-samples/wordpress-persistent-disks
-```
-
-## 8. Set the working directory environment variable 
-
-#### Command
-```Bash
-WORKING_DIR=$(pwd)
-```
-
-## 9. Create cluster
-This will create a cluster with two worker nodes in two compute zones for HA. You can adjust the variables in the command to configure the cluster to your own specification. See Google documentation for instructions. 
-
-#### Command
-```Bash
-Choose a name for your cluster it will be used in later commands in this tutorial.
+az aks create --resource-group $RESOURCE NAME --name $CLUSTER NAME --node-count 1 --enable-addons monitoring --generate-ssh-keys
 ```
 
 e.g.
 ```Bash
-$CLUSTER_NAME=tercen
-
-$COMPUTE_ZONES = europe-west2-a,europe-west2-b
+az aks create --resource-group myResourceGroup --name myAKSCluster --node-count 1 --enable-addons monitoring --generate-ssh-keys
 ```
+
+## 4. Connect to the cluster
+
 
 #### Command
 ```Bash
-gcloud container clusters create $CLUSTER_NAME  --num-nodes=2 --node-locations $COMPUTE_ZONES --enable-autoupgrade --no-enable-basic-auth --no-issue-client-certificate --enable-ip-alias --metadata disable-legacy-endpoints=true
+az aks get-credentials --resource-group $RESOURCE NAME --name $CLUSTER NAME
 ```
 
 e.g.
 ```Bash
-gcloud container clusters create tercen  --num-nodes=3 --enable-autoupgrade --no-enable-basic-auth --no-issue-client-certificate --enable-ip-alias --metadata disable-legacy-endpoints=true
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
 ```
 
-You may be required to Authorise the cloud shell.
+Verify a successful connection with a kubectl command
 
-----
+e.g.
+```Bash
+kubectl get nodes
+```
 
-## Install CouchDB
+## 4. Upload Files to Cloud Shell environment
 
-## 10. Create CouchDB Persistant Volume claim
+git clone https://github.com/tercen/tercen_studio/tree/master/examples/quick-install-walkthroughs/azure
+
+## 5. Create Storage Class.
 
 #### Command
 ```Bash
-kubectl apply -f $WORKING_DIR/couchdb-pv-claim-stage.yaml
+kubectl apply -f azure-file-sc.yaml
+```
+-----
+
+## Install CouchDB 
+
+## 6. Create CouchDB Persistent Volume Claim
+
+#### Command
+```Bash
+kubectl apply -f couchdb-pv-claim.yaml
 ```
 
-## 11. Deploy CouchDB
-Upload file to working directory.
+## 7. Deploy CouchDB
 
+#### Command
 ```Bash
-kubectl apply -f $WORKING_DIR/couchdb-stage.yaml
+kubectl apply -f couchdb-stage.yaml
 ```
 
 Check deployment.
@@ -129,7 +113,7 @@ Check deployment.
 kubectl get persistentvolumeclaim
 ```
 
-## 11. Test CouchDB install 
+## 8. Test CouchDB install 
 This test will use port forwarding to open a connection to the test browser of the Cloud Shell 
 
 #### Command
@@ -140,9 +124,7 @@ kubectl get pods
 Copy the couchdb pod name to a text file. It will be used in a later command under the variable $COUCHDB_POD.
 
 e.g.
-```Bash
-couchdb-stage-789d9d4b6d-tfzf8
-```
+couchdb-stage-6d9fff7f98-vlcsc
 
 #### Command
 ```Bash
@@ -151,75 +133,84 @@ kubectl port-forward $COUCHDB_POD 5984:5984
 
 e.g.
 ```Bash
-kubectl port-forward couchdb-stage-789d9d4b6d-tfzf8 5984:5984
+kubectl port-forward couchdb-stage-6d9fff7f98-vlcsc 5984:5984
 ```
 
-Click the web preview icon at the top right of the Cloud Shell Editor
+Click the web preview icon at the right of the Cloud Shell Editor tool bar.  
 
-Change the port to 5984
+Configure the port to 5984
 
-A Browser tab will open showing test as follows.
+Click the web preview icon again and select the option "Preview port 5984"  
 
+A Browser tab will open showing text as follows.
+ 
 e.g.
-```Bash
 {"couchdb":"Welcome","uuid":"56c45cc839391fab7bcc2410cbe0acee","version":"1.7.2","vendor":{"name":"The Apache Software Foundation","version":"1.7.2"}}
-```
 
 Return to the Terminal window and press Ctrl+C to quit port forwarding.
 
-----
+-----
 
 ## Deploy Tercen
 
-## 12. Create Tercen Service
+## 9. Create Tercen Service
 
 #### Command
 ```Bash
-kubectl apply -f $WORKING_DIR/tercen-stage-service.yaml
+kubectl apply -f tercen-stage-service.yaml
 ```
 
-
-## 13. Configure Tercen base settings 
+## 10. Configure Tercen base settings 
 These commands post the basic settings into the Tercen config file and then apply them to the cluster.
-If you need to change Tercens default values for basic config change the tercen-staging-config.yaml and then follow the commands below.
 
-Apply settings to config file.
+If you need to change Tercens default values change the tercen-staging-config.yaml and then follow the commands below.
+
+
+To apply your new settings to config file.
 ```bash
 kubectl create configmap tercen-staging-config --from-file=config.yaml=tercen-staging-config.yaml -o yaml --dry-run > tercen-staging-k8s-config.yaml
 ```
 
-Apply config file to cluster
+To apply config file to cluster
+Skip previous step is using default values.
+
 #### Command
 ```bash
 kubectl apply -f tercen-staging-k8s-config.yaml
 ```
+Check successful configuration.
+```Bash
+kubectl describe configmaps tercen-staging-config
+```
 
-## 14. Create Tercen PV Claim
+Tercens settings will appear on screen.
+
+## 11. Create Tercen PV Claim
 
 #### Command
-```bash
+```Bash
 kubectl apply -f tercen-pv-claim-stage.yaml
 ```
 
-## 15. Deploy Tercen
+## 12. Deploy Tercen
 Tercen may take a few minutes to deploy.
 
 #### Command
-```bash
-kubectl apply -f tercen-stage-deployment.yaml\
+```Bash
+kubectl apply -f tercen-stage-deployment.yaml
 ```
 
-## 16. Expose Tercen to external Load balancer
+## 13. Expose Tercen to external Load balancer
 
 #### Command
-```bash
+```Bash
 kubectl apply -f tercen-loadbalancer.yaml
 ```
 
-## 17. Test Tercen Deployment
+## 14. Test Tercen Deployment
 
 #### Command
-```bash
+```Bash
 kubectl get service
 ```
 
