@@ -1,22 +1,35 @@
-# __Install Tercen On Google Kubernetes Engine__
+# Install Tercen on Microsoft AKS Cluster
+This instruction uses the Cloud Shell function in Azure. 
+The cloud shell has most of the CLI resources (such as kubectl) pre-loaded.
 
-Based From this Google Tutorial
-https://cloud.google.com/kubernetes-engine/docs/tutorials/persistent-disk
+Tutorial:
+https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 
-This instruction will use the Google Cloud Shell to install.
+
+Some commands have variables where you will have to name objects such as your cluster and then use that name in sunsequent commands
+
+The variables are represented in this text with a $. 
+
+e.g
+$VARIABLE
+
+It is advisable that you save your variable names into a text file for use in commands.
 
 ----
-## Create a GKE Cluster
-\
 
-## 1. Go to Google Cloud
-\
 
-## 2. Select Your Project
-\
+## 1. Create a Resource Group to hold the cluster.
 
-## 3. Activate Cloud Shell
-\
+To list the Azure Region Names and choose the one nearest your location
+
+#### Command
+az account list-locations -o table
+
+#### Command
+az group create --name $RESOURCE NAME --location $REGION NAME
+
+e.g
+az group create --name myResourceGroup --location northeurope
 
 
 ----

@@ -1,0 +1,9 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tercen-stage-service
+spec:
+  selector:
+    app: tercen-stage
+  ports:
+    - port: 5400 # Default port for image
