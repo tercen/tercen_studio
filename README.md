@@ -66,3 +66,27 @@ docker build -t tercen/tercen_studio:0.9.2.10 .
 docker history --no-trunc tercen_studio:0.9.2.10
 docker push tercen/tercen_studio:0.9.2.10
 ```
+
+# Logs
+
+```bash
+docker-compose logs tercen
+```
+
+Default log level is config(400) , log level configuration can be set in the file ./config/tercen/config.yaml.
+
+```yaml
+# tercen.log.level: '400'
+tercen.log.level: '0'
+```
+
+Then restart tercen
+
+```bash
+# stop tercen_studio
+docker-compose down        
+# start tercen_studio
+docker-compose up -d
+```
+
+
