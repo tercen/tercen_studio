@@ -50,7 +50,7 @@ RUN R -e "install.packages('renv')"
 RUN R -e "install.packages(c('Rtsne', 'randomForest', 'ranger', 'rbenchmark', 'lme4' , 'shinyjs'))"
 RUN R -e "remotes::install_github('JinmiaoChenLab/ClusterX')"
 
-RUN echo "install tercen_0.9.5.tar.gz"
+RUN echo "install tercen 0.10.5"
 RUN R -e "install.packages('tercen')"
 
 RUN mkdir -p /home/rstudio/.local/share/renv

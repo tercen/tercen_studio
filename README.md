@@ -62,9 +62,9 @@ docker volume rm tercen_studio_tercen-studio-renv
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:0.9.2.10 .
-docker history --no-trunc tercen_studio:0.9.2.10
-docker push tercen/tercen_studio:0.9.2.10
+docker build -t tercen/tercen_studio:0.9.2.11 .
+docker history --no-trunc tercen_studio:0.9.2.11
+docker push tercen/tercen_studio:0.9.2.11
 ```
 
 # Logs
