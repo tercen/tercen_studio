@@ -2,6 +2,22 @@
 # tercen.log.level: '400'
 tercen.couchdb.address: couchdb
 
+tercen.client.uri: http://tercen:5400
+tercen.public.uri: http://172.17.0.1:5402
+tercen.public.client.uri: http://172.17.0.1:5402
+tercen.worker.public.ip: 172.17.0.1
+tercen.worker.ip: tercen
+
+#tercen.allow.untrusted.docker: 'false'
+# accept any image name starting by tercen, ex. tercen/something
+#tercen.trusted.docker:
+#  - 'tercen'
+
+tercen.worker.docker.operator.folder: /var/lib/tercen/data/operator/
+#tercen.worker.docker.image: tercen/dartrusttidy:1.0.10
+#tercen.worker.docker.network: host
+tercen.worker.docker.remove.on.start: 'true'
+
 DefaultProfiles:
 - 2.api.profile
 - 2.table.profile

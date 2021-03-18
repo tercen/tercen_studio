@@ -44,7 +44,8 @@ docker-compose pull
 # start tercen_studio
 docker-compose up -d
 ``` 
-
+git config --global user.email "alexandre.maurel@gmail.com"
+git config --global user.name "Alexandre Maurel"
 # Uninstall
 
 ```bash
@@ -62,9 +63,9 @@ docker volume rm tercen_studio_tercen-studio-renv
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:0.9.2.12 .
-docker history --no-trunc tercen_studio:0.9.2.12
-docker push tercen/tercen_studio:0.9.2.12
+docker build -t tercen/tercen_studio:4.0.3-1 .
+docker history --no-trunc tercen_studio:4.0.3-1
+docker push tercen/tercen_studio:4.0.3-1
 ```
 
 # Logs

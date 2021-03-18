@@ -15,12 +15,13 @@ services:
       - couchdb
 # see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
 # for specific version
-    image: tercen/tercen:0.5
+    image: tercen/tercen:stage
     ports:
       - "5402:5400"
-#    environment:
+    environment:
+      - FORCE_RELOAD=3
 #      - tercen.log.level="0"
-# needed for docker operators, 172.17.0.1 is the default docker gateway
+## needed for docker operators, 172.17.0.1 is the default docker gateway
 #      - tercen.public.client.uri=http://172.17.0.1:5402
 #      - tercen.worker.public.ip=172.17.0.1
     env_file:
@@ -29,13 +30,41 @@ services:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
 # needed for docker operators
-#      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  runtime_R-3.5:
+    image: tercen/dartrusttidy:1.0.10
+    container_name: runtime_R-3.5
+    entrypoint: /usr/bin/python
+    command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
+    ports:
+      - "54000-54004"
+    environment:
+      - FORCE_RELOAD=1
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  runtime_R-4.0:
+    image: tercen/dartrusttidy:4.0.3-0
+    container_name: runtime_R-4.0
+    entrypoint: /usr/bin/python
+    command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
+    ports:
+      - "54000-54004"
+    environment:
+      - FORCE_RELOAD=1
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:0.9.2.12
+    image: tercen/tercen_studio:4.0.3-1
     ports:
       - "8787:8787"
     environment:
