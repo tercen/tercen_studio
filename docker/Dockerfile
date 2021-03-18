@@ -29,7 +29,7 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
 
 
 USER rstudio
-
+RUN R -e "install.packages('renv')"
 RUN echo "install tercen 0.10.8"
 RUN R -e "install.packages('tercen')"
 
