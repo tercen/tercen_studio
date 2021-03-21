@@ -1,20 +1,18 @@
 FROM rocker/tidyverse:4.0.3
 
-RUN apt-get update && apt-get install -y curl && curl --version
-
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
 RUN echo "PATH=/home/rstudio/.cargo/bin:${PATH}" >> /usr/local/lib/R/etc/Renviron
 
 USER rstudio
 WORKDIR /home/rstudio
-# Global site-wide config -- neeeded for building packages
+
 RUN mkdir -p /home/rstudio/.R/ \
     && echo "MAKE=make -j8\n" >> /home/rstudio/.R/Makevars
 
 RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y -q
 
 USER root
-
+# Global site-wide config
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
@@ -29,11 +27,12 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
 
 
 USER rstudio
+
+RUN mkdir -p /home/rstudio/.local/share/renv
+
 RUN R -e "install.packages('renv')"
 RUN echo "install tercen 0.10.8"
 RUN R -e "install.packages('tercen')"
-
-RUN mkdir -p /home/rstudio/.local/share/renv
 
 USER root
 

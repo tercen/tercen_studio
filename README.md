@@ -44,8 +44,7 @@ docker-compose pull
 # start tercen_studio
 docker-compose up -d
 ``` 
-git config --global user.email "alexandre.maurel@gmail.com"
-git config --global user.name "Alexandre Maurel"
+ 
 # Uninstall
 
 ```bash

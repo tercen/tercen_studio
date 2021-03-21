@@ -18,25 +18,18 @@ services:
     image: tercen/tercen:stage
     ports:
       - "5402:5400"
-    environment:
-      - FORCE_RELOAD=3
-#      - tercen.log.level="0"
-## needed for docker operators, 172.17.0.1 is the default docker gateway
-#      - tercen.public.client.uri=http://172.17.0.1:5402
-#      - tercen.worker.public.ip=172.17.0.1
     env_file:
       - config/env/couchdb.env
     volumes:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-# needed for docker operators
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
   runtime_R-3.5:
     image: tercen/dartrusttidy:1.0.10
     container_name: runtime_R-3.5
-    entrypoint: /usr/bin/python
+    entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
     ports:
       - "54000-54004"
@@ -50,7 +43,7 @@ services:
   runtime_R-4.0:
     image: tercen/dartrusttidy:4.0.3-0
     container_name: runtime_R-4.0
-    entrypoint: /usr/bin/python
+    entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
     ports:
       - "54000-54004"
@@ -64,7 +57,7 @@ services:
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:4.0.3-1
+    image: tercen/tercen_studio:4.0.3-2
     ports:
       - "8787:8787"
     environment:

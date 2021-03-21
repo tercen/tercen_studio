@@ -8,15 +8,15 @@ tercen.public.client.uri: http://172.17.0.1:5402
 tercen.worker.public.ip: 172.17.0.1
 tercen.worker.ip: tercen
 
+# default true, accept any imag
 #tercen.allow.untrusted.docker: 'false'
-# accept any image name starting by tercen, ex. tercen/something
+
+# accept any image name starting by tercen or my-trusted-docker-repo, ex. my-trusted-docker-repo/my-docker-image
 #tercen.trusted.docker:
 #  - 'tercen'
+#  - 'my-trusted-docker-repo'
 
-tercen.worker.docker.operator.folder: /var/lib/tercen/data/operator/
-#tercen.worker.docker.image: tercen/dartrusttidy:1.0.10
-#tercen.worker.docker.network: host
-tercen.worker.docker.remove.on.start: 'true'
+#tercen.r.operator.reinstall: 'true'
 
 DefaultProfiles:
 - 2.api.profile
