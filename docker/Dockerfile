@@ -35,7 +35,7 @@ USER rstudio
 
 RUN mkdir -p /home/rstudio/.local/share/renv
 
-RUN R -e "install.packages(c('renv', 'reticulate', 'shiny', 'shinyjs', 'dplyr'))"
+RUN R -e "install.packages(c('renv'))"
 RUN echo "install tercen 0.10.8"
 RUN R -e "install.packages('tercen')"
 
