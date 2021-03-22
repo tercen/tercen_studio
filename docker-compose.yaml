@@ -31,13 +31,8 @@ services:
     container_name: runtime_R-3.5
     entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
-    ports:
-      - "54000-54004"
-    environment:
-      - FORCE_RELOAD=1
     volumes:
       - tercen-data:/var/lib/tercen/data
-      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
   runtime_R-4.0:
@@ -45,19 +40,14 @@ services:
     container_name: runtime_R-4.0
     entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
-    ports:
-      - "54000-54004"
-    environment:
-      - FORCE_RELOAD=1
     volumes:
       - tercen-data:/var/lib/tercen/data
-      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:4.0.3-4
+    image: tercen/tercen_studio:4.0.3-5
     ports:
       - "8787:8787"
     environment:
@@ -65,6 +55,8 @@ services:
     volumes:
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
+# sharing gitconfig can be usefull
+#      - ~/.gitconfig:/home/rstudio/.gitconfig
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
     restart: always
