@@ -26,18 +26,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
-  runtime_R-3.5:
+  runtime-R35:
     image: tercen/dartrusttidy:1.0.10
-    container_name: runtime_R-3.5
     entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
 
-  runtime_R-4.0:
+  runtime-R40:
     image: tercen/dartrusttidy:4.0.3-0
-    container_name: runtime_R-4.0
     entrypoint: /usr/bin/python3
     command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
     volumes:
