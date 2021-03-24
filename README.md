@@ -62,8 +62,8 @@ docker volume rm tercen_studio_tercen-studio-renv
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:4.0.3-5 .
-docker push tercen/tercen_studio:4.0.3-5
+docker build -t tercen/tercen_studio:4.0.3-6 .
+docker push tercen/tercen_studio:4.0.3-6
 ```
 
 # Logs

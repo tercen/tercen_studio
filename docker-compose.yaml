@@ -26,41 +26,41 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
-  runtime-R35:
-    image: tercen/dartrusttidy:1.0.10
-    entrypoint: /usr/bin/python3
-    command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
+  runtime-r35:
+    image: tercen/runtime-r35:3.5.3-0
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
 
-  runtime-R40:
-    image: tercen/dartrusttidy:4.0.3-0
-    entrypoint: /usr/bin/python3
-    command: [ "-c", "while 1: import ctypes; ctypes.CDLL(None).pause()" ]
+  runtime-r40:
+    image: tercen/runtime-r40:4.0.3-0
     volumes:
       - tercen-data:/var/lib/tercen/data
+      - tercen-conda:/root/.local/share/r-miniconda
     restart: always
 
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:4.0.3-5
+    image: tercen/tercen_studio:4.0.3-6
     ports:
       - "8787:8787"
     environment:
       - PASSWORD=tercen
     volumes:
+      - tercen-studio-conda:/home/rstudio/.local/share/r-miniconda
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
-# sharing gitconfig can be usefull
-#      - ~/.gitconfig:/home/rstudio/.gitconfig
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
+    # sharing gitconfig can be usefull
+#      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
 volumes:
   couchdb-data:
   tercen-data:
+  tercen-conda:
   tercen-studio-data:
   tercen-studio-renv:
+  tercen-studio-conda:
