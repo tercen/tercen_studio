@@ -1,20 +1,35 @@
-FROM rocker/tidyverse:4.0.3
+FROM rocker/tidyverse:3.5.3
 
-RUN apt-get update && apt-get install -y curl && curl --version
+RUN apt-get install -y curl && curl --version
 
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
 RUN echo "PATH=/home/rstudio/.cargo/bin:${PATH}" >> /usr/local/lib/R/etc/Renviron
 
 USER rstudio
 WORKDIR /home/rstudio
-
+# Global site-wide config -- neeeded for building packages
 RUN mkdir -p /home/rstudio/.R/ \
     && echo "MAKE=make -j8\n" >> /home/rstudio/.R/Makevars
+
+RUN echo "rust version 1.39.0 (4560ea788 2019-11-04)"
 
 RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y -q
 
 USER root
-# Global site-wide config
+
+RUN apt-get remove -y curl && \
+    wget https://curl.haxx.se/download/curl-7.58.0.tar.gz && \
+    tar -xvf curl-7.58.0.tar.gz && \
+    cd curl-7.58.0 && \
+    ./configure && \
+    make && \
+    make install && \
+    make clean && \
+    cd .. && \
+    rm -r curl-7.58.0 && \
+    rm curl-7.58.0.tar.gz
+
+
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
@@ -27,7 +42,8 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
      BioCworkflows="https://cran.tercen.com/api/v1/rlib/BioCworkflows-3.12" \
      ))' >> /usr/local/lib/R/etc/Rprofile.site
 
-RUN apt-get install -y python3 python3-dev python3-pip python3-venv
+
+RUN apt-get update && apt-get install -y python3 python3-dev python3-pip python3-venv
 
 USER rstudio
 

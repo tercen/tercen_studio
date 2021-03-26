@@ -62,8 +62,15 @@ docker volume rm tercen_studio_tercen-studio-renv
 
 ```bash
 cd docker
-docker build -t tercen/tercen_studio:4.0.3-6 .
-docker push tercen/tercen_studio:4.0.3-6
+docker build -t tercen/tercen_studio:4.0.3-7 docker/r40
+docker push tercen/tercen_studio:4.0.3-7
+
+docker build -t tercen/tercen_studio:3.5.3-0 docker/r35
+
+docker build -t tercen/docker_operator docker/docker_operator
+docker build -t tercen/docker_operator .
+
+docker run -it --rm -v /home/alex/dev/tercen/tercen_studio/:/root/mydevfolder tercen/docker_operator bash
 ```
 
 # Logs
