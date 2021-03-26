@@ -2,13 +2,14 @@
 # tercen.log.level: '400'
 tercen.couchdb.address: couchdb
 
+# will use all available cpu and memory
+tercen.worker.proc.override: 'true'
+tercen.worker.proc.override.isolates.cpu.ratio: '1.0'
+
 # manually set available worker threads and memory
 #tercen.worker.isolates: '4'
 # set 7G of available memory
 #tercen.worker.memory: '7096000000'
-
-# will use all available cpu and memory
-#tercen.worker.proc.override: 'true'
 
 DefaultProfiles:
 - 2.api.profile
