@@ -1,6 +1,6 @@
 FROM rocker/tidyverse:3.5.3
 
-RUN apt-get install -y curl && curl --version
+RUN apt-get update && apt-get install -y curl && curl --version
 
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
 RUN echo "PATH=/home/rstudio/.cargo/bin:${PATH}" >> /usr/local/lib/R/etc/Renviron
