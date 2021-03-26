@@ -2,6 +2,9 @@
 # tercen.log.level: '400'
 tercen.couchdb.address: couchdb
 
+# will use all available cpu and memory
+#tercen.worker.proc.override: 'true'
+
 DefaultProfiles:
 - 2.api.profile
 - 2.table.profile

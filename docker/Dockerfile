@@ -55,12 +55,6 @@ RUN R -e "install.packages('tercen')"
 
 RUN mkdir -p /home/rstudio/.local/share/renv
 
-# install renv
-# see https://github.com/tercen/log_operator/blob/master/renv/activate.R
-#ENV RENV_PATHS_LIBRARY="/home/rstudio/.local/share/renvlib"
-#RUN mkdir -p ${RENV_PATHS_LIBRARY}/R-3.5/x86_64-pc-linux-gnu
-#RUN R -e "remotes::install_github('rstudio/renv@0.9.2-19', lib='${RENV_PATHS_LIBRARY}/R-3.5/x86_64-pc-linux-gnu')"
-
 USER root
 
 RUN adduser rstudio sudo
