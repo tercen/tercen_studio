@@ -93,4 +93,8 @@ docker-compose down
 docker-compose up -d
 ```
 
+# utils
 
+```shell
+sudo chown -R me:mygroup ./config
+```
