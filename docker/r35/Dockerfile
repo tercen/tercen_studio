@@ -56,7 +56,7 @@ RUN echo "install tercen 0.10.8"
 RUN R -e "install.packages('tercen')"
 RUN R -e "install.packages('reticulate')"
 #RETICULATE_MINICONDA_PATH
-RUN R -e "reticulate::install_miniconda()"
+#RUN R -e "reticulate::install_miniconda()"
 
 USER root
 
