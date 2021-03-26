@@ -43,6 +43,10 @@ git pull
 docker-compose pull
 # start tercen_studio
 docker-compose up -d
+
+# check allocated worker threads and memory (see config.yaml for more settings)
+docker-compose logs tercen | grep tercen.worker.isolates
+docker-compose logs tercen | grep tercen.worker.memory
 ``` 
 
 # Uninstall
