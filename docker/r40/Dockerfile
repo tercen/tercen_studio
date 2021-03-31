@@ -31,8 +31,7 @@ RUN apt-get install -y python3 python3-dev python3-pip python3-venv
 
 USER rstudio
 
-#RUN python3 -m pip install pandas
-
+RUN mkdir -p /home/rstudio/projects
 RUN mkdir -p /home/rstudio/.local/share/renv
 
 RUN R -e "install.packages(c('renv'))"
@@ -46,4 +45,5 @@ USER root
 
 RUN adduser rstudio sudo
 
+VOLUME /home/rstudio/projects
 VOLUME /home/rstudio/.local/share/renv
