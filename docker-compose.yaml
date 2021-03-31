@@ -15,36 +15,46 @@ services:
       - couchdb
 # see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
 # for specific version
-    image: tercen/tercen:0.5
+    image: tercen/tercen:stage
     ports:
       - "5402:5400"
-#    environment:
-#      - tercen.log.level="0"
-# needed for docker operators, 172.17.0.1 is the default docker gateway
-#      - tercen.public.client.uri=http://172.17.0.1:5402
-#      - tercen.worker.public.ip=172.17.0.1
     env_file:
       - config/env/couchdb.env
     volumes:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-# needed for docker operators
-#      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  runtime-r35:
+    image: tercen/runtime-r35:3.5.3-0
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+    restart: always
+
+  runtime-r40:
+    image: tercen/runtime-r40:4.0.3-0
+    volumes:
+      - tercen-data:/var/lib/tercen/data
     restart: always
 
   tercen_studio:
     links:
       - tercen
-    image: tercen/tercen_studio:0.9.2.12
+#    image: tercen/tercen_studio:3.5.3-0
+    image: tercen/tercen_studio:4.0.3-8
     ports:
       - "8787:8787"
     environment:
+      - FORCE_RECREATE=7
       - PASSWORD=tercen
     volumes:
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
+    # sharing gitconfig can be usefull
+#      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
 volumes:
