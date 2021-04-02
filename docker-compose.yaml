@@ -33,7 +33,7 @@ services:
     restart: always
 
   runtime-r40:
-    image: tercen/runtime-r40:4.0.3-1
+    image: tercen/runtime-r40:4.0.3-2
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
@@ -42,7 +42,7 @@ services:
     links:
       - tercen
 #    image: tercen/tercen_studio:3.5.3-1
-    image: tercen/tercen_studio:4.0.3-9
+    image: tercen/tercen_studio:4.0.3-10
     ports:
       - "8787:8787"
     environment:
