@@ -33,7 +33,7 @@ services:
     restart: always
 
   runtime-r40:
-    image: tercen/runtime-r40:4.0.3-4
+    image: tercen/runtime-r40:4.0.3-5
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
