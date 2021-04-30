@@ -15,7 +15,7 @@ services:
       - couchdb
 # see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
 # for specific version
-    image: tercen/tercen:stage
+    image: tercen/tercen:0.5.78-server
     ports:
       - "5402:5400"
     env_file:
@@ -27,13 +27,13 @@ services:
     restart: always
 
   runtime-r35:
-    image: tercen/runtime-r35:3.5.3-0
+    image: tercen/runtime-r35:3.5.3-2
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
 
   runtime-r40:
-    image: tercen/runtime-r40:4.0.4-0
+    image: tercen/runtime-r40:4.0.4-1
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always
