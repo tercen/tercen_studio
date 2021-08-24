@@ -1,6 +1,6 @@
 library(tercen)
  
-options("tercen.serviceUri"="http://172.17.0.1:5400/api/v1/")
+# options("tercen.serviceUri"="http://172.17.0.1:5400/api/v1/")
 
 filename = '~/projects/examples/crabs-long.csv'
 teamName = 'test-team'
