@@ -1,6 +1,8 @@
 library(tercen)
  
-filename = '~/examples/crabs-long.csv'
+options("tercen.serviceUri"="http://172.17.0.1:5400/api/v1/")
+
+filename = '~/projects/examples/crabs-long.csv'
 teamName = 'test-team'
 projectName = 'myproject'
 
@@ -9,7 +11,7 @@ client = TercenClient$new()
 client$session
 
 projects = client$documentService$findProjectByOwnersAndCreatedDate(
-    startKey=list(teamName,'2020'),
+    startKey=list(teamName,'2022'),
     endKey=list(teamName,''))
 
 project = Find(function(p) identical(p$name,projectName), projects)
@@ -35,8 +37,13 @@ task$state = InitState$new()
 task$fileDocumentId = fileDoc$id
 task$owner = project$acl$owner
 task$projectId = project$id
+task$params$separator = ','
+task$params$encoding = 'iso-8859-1'
+task$params$quote = '"'
+task
 
 task = client$taskService$create(task)
+task
 client$taskService$runTask(task$id)
 task = client$taskService$waitDone(task$id)
 task
