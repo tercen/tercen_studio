@@ -16,7 +16,7 @@ services:
 # see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
 # for specific version
 #    image: tercen/tercen:prod
-    image: tercen/tercen:0.5.87-server
+    image: tercen/tercen:0.5.89-server
     ports:
       - "5402:5400"
     env_file:
