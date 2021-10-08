@@ -19,6 +19,8 @@ services:
     image: tercen/tercen:0.5.89-server
     ports:
       - "5402:5400"
+#    environment:
+#      - TERCEN_R_OPERATOR_RUN_TEST=false
     env_file:
       - config/env/couchdb.env
     volumes:
