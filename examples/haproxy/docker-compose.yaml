@@ -1,0 +1,73 @@
+version: "3.2"
+
+services:
+
+  reverse-proxy:
+    networks:
+      tercen:
+        aliases:
+          - reverse-proxy
+    image: haproxy:1.7
+    volumes:
+      - ./config/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - 5410:80
+
+  couchdb:
+    image: ibmcom/couchdb3:3.1.1
+    networks:
+      tercen:
+        aliases:
+          - couchdb
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    volumes:
+      - couchdb3-data:/opt/couchdb/data
+    restart: always
+
+  tercen:
+#    image: tercen/tercen:0.5.92-server
+    networks:
+      tercen:
+        aliases:
+          - tercen
+    image: tercen/tercen:0.5.89-server
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+      - ./config/tercen:/etc/tercen
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  runtime-r35:
+    image: tercen/runtime-r35:3.5.3-5
+    networks:
+      tercen:
+        aliases:
+          - runtime-r35
+    volumes:
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+    restart: always
+
+  runtime-r40:
+    image: tercen/runtime-r40:4.0.4-2
+    networks:
+      tercen:
+        aliases:
+          - runtime-r40
+    volumes:
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+    restart: always
+
+networks:
+  tercen:
+
+volumes:
+  couchdb3-data:
+  tercen-data:
+  tercen-operator:
+  tercen-renv:

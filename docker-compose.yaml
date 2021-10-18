@@ -30,7 +30,7 @@ services:
     restart: always
 
   runtime-r35:
-    image: tercen/runtime-r35:3.5.3-2
+    image: tercen/runtime-r35:3.5.3-5
     volumes:
       - tercen-data:/var/lib/tercen/data
     restart: always

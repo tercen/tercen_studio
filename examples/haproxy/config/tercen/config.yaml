@@ -1,0 +1,70 @@
+# ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
+# tercen.log.level: '700'
+tercen.log.level: '0'
+
+# use to pad password before hashing
+tercen.secret: "f1afc1b3-0782-41da-9cd0-5a094f940074"
+tercen.test.password: test
+tercen.admin.password: admin
+tercen.worker.password: admin
+
+#tercen.github.token: xxxxxxx
+#tercen.auth.cookie.domain: xxx.com
+
+tercen.client.uri: http://tercen:5400
+tercen.public.uri: http://172.17.0.1:5410
+tercen.public.client.uri: http://172.17.0.1:5410
+tercen.worker.public.ip: 172.17.0.1
+tercen.worker.ip: tercen
+tercen.worker.webapp.ip: runtime
+
+#tercen.docker.network: haproxy_tercen
+#tercen.client.uri: http://tercen:5400
+#tercen.worker.ip: tercen
+#tercen.worker.webapp.ip: runtime
+#tercen.public.uri: http://tercen:5400
+#tercen.public.client.uri: http://tercen:5400
+
+tercen.couchdb.address: couchdb
+#tercen.couchdb.user=admin
+#tercen.couchdb.password=admin
+
+tercen.smtp.username: xxx@xxx.com
+tercen.smtp.password: xxxx
+
+tercen.allow.untrusted.git: 'false'
+
+#tercen.trusted.git:
+#  - 'https://github.com/tercen/'
+
+#tercen.r.operator.reinstall: 'true'
+
+# will use all available cpu and memory
+tercen.worker.proc.override: 'true'
+tercen.worker.proc.override.isolates.cpu.ratio: '1.0'
+
+# manually set available worker threads and memory
+#tercen.worker.isolates: '4'
+# set 7G of available memory
+#tercen.worker.memory: '7096000000'
+
+tercen.ws.compression: "on"
+
+DefaultProfiles:
+- 2.api.profile
+- 2.table.profile
+- 2.cpuTime.profile
+- 2.storage.profile
+- 2.run.profile
+
+# LDAP
+#tercen.user.service: 'ldap'
+#tercen.user.sign.up: 'false'
+#tercen.user.service.ldap.host: '127.0.0.1'
+#tercen.user.service.ldap.protocol: ''
+#tercen.user.service.ldap.port: '389'
+## TLS
+## tercen.user.service.ldap.protocol: 'ssl'
+## tercen.user.service.ldap.port: '636'
+#
+#tercen.user.service.ldap.bind: 'dc=example,dc=org'
