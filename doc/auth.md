@@ -61,7 +61,7 @@ For now self signed certificate is accepted.
 
 ## OpenLdap
 
-Start openldap container and populate with adam user
+Start openldap container and populate it with adam user.
 
 ```bash
 docker run -it -d  --name openldap \
@@ -77,11 +77,13 @@ docker cp doc/adam_ldap_user.ldif openldap:/adam_ldap_user.ldif
 docker exec -it openldap ldapadd -x -w admin -D "cn=admin,dc=example,dc=org" -f /adam_ldap_user.ldif
 ```
 
+Set the following config and restart tercen.
+
 Tercen config
 
 ```shell
 tercen.user.service: 'ldap'
-tercen.user.service.ldap.host: '127.0.0.1'
+tercen.user.service.ldap.host: '172.17.0.1'
 tercen.user.service.ldap.protocol: ''
 tercen.user.service.ldap.port: '3890'
 tercen.user.service.ldap.admin.dn: cn=admin,dc=example,dc=org

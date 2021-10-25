@@ -2,6 +2,16 @@
 # tercen.log.level: '700'
 tercen.log.level: '0'
 
+#tercen.user.service: 'ldap'
+#tercen.user.service.ldap.host: '172.17.0.1'
+#tercen.user.service.ldap.protocol: ''
+#tercen.user.service.ldap.port: '3890'
+#tercen.user.service.ldap.admin.dn: cn=admin,dc=example,dc=org
+#tercen.user.service.ldap.admin.password: admin
+#tercen.user.service.ldap.base.search: dc=example,dc=org
+#tercen.user.service.ldap.search.attribute: uid
+#tercen.user.service.ldap.method: bind
+
 # use to pad password before hashing
 tercen.secret: "f1afc1b3-0782-41da-9cd0-5a094f940074"
 tercen.test.password: test
