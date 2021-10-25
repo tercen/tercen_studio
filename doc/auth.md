@@ -61,9 +61,38 @@ For now self signed certificate is accepted.
 
 ## OpenLdap
 
+Start openldap container and populate with adam user
+
 ```bash
-docker run -it -d  --name openldap --net=host \
+docker run -it -d  --name openldap \
         -e LDAP_TLS=false \
         -e LDAP_ADMIN_PASSWORD=admin \
+        -p 3890:389 \
         osixia/openldap:1.2.2
+
+# add user
+# user : adam
+# pwd: adam
+docker cp doc/adam_ldap_user.ldif openldap:/adam_ldap_user.ldif
+docker exec -it openldap ldapadd -x -w admin -D "cn=admin,dc=example,dc=org" -f /adam_ldap_user.ldif
+```
+
+Tercen config
+
+```shell
+tercen.user.service: 'ldap'
+tercen.user.service.ldap.host: '127.0.0.1'
+tercen.user.service.ldap.protocol: ''
+tercen.user.service.ldap.port: '3890'
+tercen.user.service.ldap.admin.dn: cn=admin,dc=example,dc=org
+tercen.user.service.ldap.admin.password: admin
+tercen.user.service.ldap.base.search: dc=example,dc=org
+tercen.user.service.ldap.search.attribute: uid
+tercen.user.service.ldap.method: bind
+```
+
+Clean up
+
+```shell
+docker rm -f openldap
 ```
