@@ -59,7 +59,7 @@ When a new session is created, the following is executed
 
 For now self signed certificate is accepted.
 
-## OpenLdap
+## Using OpenLdap
 
 Start openldap container and populate it with adam user.
 
