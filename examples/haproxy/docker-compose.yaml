@@ -32,7 +32,7 @@ services:
       tercen:
         aliases:
           - tercen
-    image: tercen/tercen:0.5.89-server
+    image: tercen/tercen:0.5.89-1
     volumes:
       - tercen-data:/var/lib/tercen/data
       - tercen-operator:/var/lib/tercen/data/operator/
