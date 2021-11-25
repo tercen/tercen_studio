@@ -1,13 +1,21 @@
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
 # tercen.log.level: '400'
+tercen.log.level: '0'
 tercen.couchdb.address: couchdb
 
-tercen.client.uri: http://tercen:5400
-tercen.public.uri: http://172.17.0.1:5402
-tercen.public.client.uri: http://172.17.0.1:5402
-tercen.worker.public.ip: 172.17.0.1
+tercen.client.uri: http://172.42.0.42:5400
+tercen.public.uri: http://172.42.0.42:5400
+tercen.public.client.uri: http://172.42.0.42:5400
+tercen.worker.public.ip: runtime-docker
 tercen.worker.ip: tercen
-tercen.worker.webapp.ip: runtime
+tercen.worker.webapp.ip: runtime-docker
+
+#tercen.client.uri: http://tercen:5400
+#tercen.public.uri: http://172.17.0.1:5402
+#tercen.public.client.uri: http://172.17.0.1:5402
+#tercen.worker.public.ip: 172.17.0.1
+#tercen.worker.ip: tercen
+#tercen.worker.webapp.ip: runtime
 # default true, accept any imag
 #tercen.allow.untrusted.docker: 'false'
 

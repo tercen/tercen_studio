@@ -1,8 +1,20 @@
 version: "3.2"
+
+networks:
+  tercen:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.42.0.0/16
+
 services:
 
   couchdb:
     image: couchdb:1.7.2
+    networks:
+      tercen:
+        aliases:
+          - couchdb
     env_file:
       - config/env/couchdb.env
     volumes:
@@ -11,39 +23,67 @@ services:
     restart: always
 
   tercen:
-    links:
-      - couchdb
-# see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
-# for specific version
-#    image: tercen/tercen:prod
-    image: tercen/tercen:0.5.89-server
+    networks:
+      tercen:
+        ipv4_address: 172.42.0.42
+        aliases:
+          - tercen
+    image: tercen/tercen:0.5.89-7
     ports:
       - "5402:5400"
-#    environment:
+    environment:
+      - tercen.r.operator.docker.reinstall=true
 #      - TERCEN_R_OPERATOR_RUN_TEST=false
     env_file:
       - config/env/couchdb.env
     volumes:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-      - /var/run/docker.sock:/var/run/docker.sock
+      - var-run:/var/run
+    restart: always
+
+  runtime-docker:
+    privileged: true
+    image: docker:20.10.9-dind-alpine3.14
+    networks:
+      tercen:
+        aliases:
+          - runtime-docker
+    volumes:
+      - var-run:/var/run
+      - var-lib-docker:/var/lib/docker
+      - tercen-data:/var/lib/tercen/data
     restart: always
 
   runtime-r35:
-    image: tercen/runtime-r35:3.5.3-5
-    volumes:
-      - tercen-data:/var/lib/tercen/data
     restart: always
+    volumes:
+      - var-run:/var/run
+    image: docker:20.10
+    command: >
+      sh -c "docker rm -f runtime-r35 || true &&
+      docker run --rm --name runtime-r35
+      --network host
+      -v /var/lib/tercen/data:/var/lib/tercen/data
+      tercen/runtime-r35:3.5.3-5"
 
   runtime-r40:
-    image: tercen/runtime-r40:4.0.4-1
-    volumes:
-      - tercen-data:/var/lib/tercen/data
     restart: always
+    volumes:
+      - var-run:/var/run
+    image: docker:20.10
+    command: >
+      sh -c "docker rm -f runtime-r40 || true &&
+      docker run --rm --name runtime-r40
+      --network host
+      -v /var/lib/tercen/data:/var/lib/tercen/data
+      tercen/runtime-r40:4.0.4-1"
 
   tercen_studio:
-    links:
-      - tercen
+    networks:
+      tercen:
+        aliases:
+          - tercen_studio
     image: tercen/tercen_studio:4.0.4-0
     ports:
       - "8787:8787"
@@ -64,3 +104,5 @@ volumes:
   tercen-data:
   tercen-studio-data:
   tercen-studio-renv:
+  var-lib-docker:
+  var-run:
