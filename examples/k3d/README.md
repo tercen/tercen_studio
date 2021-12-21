@@ -48,4 +48,23 @@ sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/rele
 sudo chmod +x /usr/local/bin/argocd
 
 kubectl --namespace argocd get pods
+
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+# QstMip1O84VoEdS1
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+kubectl create namespace tercen-studio
+kubectl apply -f examples/k3d/app.yaml
+kubectl delete -f examples/k3d/app.yaml
+
+argocd app sync tercen-studio
+kubectl --namespace tercen-studio get pods
+
+
+
+argocd login 127.0.0.1:8080
+
+argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default`
+
+argocd app get tercen-studio
 ```
