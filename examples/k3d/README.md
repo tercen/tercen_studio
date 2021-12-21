@@ -54,13 +54,11 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 kubectl create namespace tercen-studio
+kubectl delete namespace tercen-studio
+
 kubectl apply -f examples/k3d/app.yaml
 kubectl delete -f examples/k3d/app.yaml
-
  
-
-
-
 
 argocd login 127.0.0.1:8080
 

@@ -12,3 +12,9 @@ spec:
     repoURL: https://github.com/tercen/tercen_studio
     path: examples/k3d/manifest
     targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
