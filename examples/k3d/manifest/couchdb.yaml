@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: couchdb-k3d
+  name: couchdb
   labels:
     app: couchdb
 spec:

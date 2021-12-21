@@ -27,7 +27,7 @@ kubectl delete -f examples/k3d/couchdb/pvc.yaml
 
 kubectl apply -f examples/k3d/tercen/pvc.yaml
 
-kubectl create configmap tercen-config --from-file=config.yaml=examples/k3d/tercen/tercen-config.yaml -o yaml --dry-run | kubectl apply -f -
+kubectl create configmap tercen-config --from-file=config.yaml=examples/k3d/manifest/tercen-config.yaml -o yaml --dry-run | kubectl apply -f -
 kubectl apply -f examples/k3d/tercen/tercen.yaml
 kubectl apply -f examples/k3d/tercen/ingress.yaml
 
@@ -57,8 +57,8 @@ kubectl create namespace tercen-studio
 kubectl apply -f examples/k3d/app.yaml
 kubectl delete -f examples/k3d/app.yaml
 
-argocd app sync tercen-studio
-kubectl --namespace tercen-studio get pods
+ 
+
 
 
 
@@ -67,4 +67,8 @@ argocd login 127.0.0.1:8080
 argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default`
 
 argocd app get tercen-studio
+argocd app sync tercen-studio
+
+kubectl --namespace tercen-studio get pods
+kubectl --namespace tercen-studio describe pod tercen-deployment-65964f78ff-k8hvb
 ```
