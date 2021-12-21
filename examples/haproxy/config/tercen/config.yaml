@@ -1,3 +1,11 @@
+configs:
+  - domain: ''
+    hosts:
+      - 127.0.0.1
+      - 172.17.0.1
+      - tercen
+    config:
+      tercen.log.level: '0'
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
 # tercen.log.level: '700'
 tercen.log.level: '0'

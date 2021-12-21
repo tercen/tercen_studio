@@ -31,26 +31,30 @@ services:
     image: tercen/tercen:0.5.89-7
     ports:
       - "5402:5400"
-    environment:
-      - tercen.r.operator.docker.reinstall=true
+#    environment:
+#      - tercen.r.operator.docker.reinstall=true
 #      - TERCEN_R_OPERATOR_RUN_TEST=false
     env_file:
       - config/env/couchdb.env
     volumes:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-      - var-run:/var/run
+      - ./run_user_1000:/var/run
     restart: always
 
   runtime-docker:
     privileged: true
-    image: docker:20.10.9-dind-alpine3.14
+#    image: docker:20.10.9-dind-alpine3.14
+    image: docker:20.10.11-dind-rootless
+
     networks:
       tercen:
         aliases:
           - runtime-docker
     volumes:
-      - var-run:/var/run
+#      - var-run:/var/run
+      - ./run_user_1000:/run/user/1000
+      - ./rootless_home:/home/rootless
       - var-lib-docker:/var/lib/docker
       - tercen-data:/var/lib/tercen/data
     restart: always
@@ -58,7 +62,7 @@ services:
   runtime-r35:
     restart: always
     volumes:
-      - var-run:/var/run
+      - ./run_user_1000:/var/run
     image: docker:20.10
     command: >
       sh -c "docker rm -f runtime-r35 || true &&
@@ -70,7 +74,7 @@ services:
   runtime-r40:
     restart: always
     volumes:
-      - var-run:/var/run
+      - ./run_user_1000:/var/run
     image: docker:20.10
     command: >
       sh -c "docker rm -f runtime-r40 || true &&
@@ -106,3 +110,4 @@ volumes:
   tercen-studio-renv:
   var-lib-docker:
   var-run:
+  rootless-home:

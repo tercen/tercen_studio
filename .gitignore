@@ -2,5 +2,7 @@
 .idea/
 /docker-compose-dev.yaml
 /config/tercen-studio/examples/data/melanoma_3_new.fcs
+run_user_1000
+rootless_home
 rootless_home
 run_user_1000
