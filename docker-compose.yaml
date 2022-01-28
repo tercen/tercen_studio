@@ -1,13 +1,33 @@
 version: "3.2"
 services:
 
+#  couchdb:
+#    image: couchdb:1.7.2
+#    env_file:
+#      - config/env/couchdb.env
+#    volumes:
+#      - couchdb-data:/usr/local/var/lib/couchdb
+#      - ./config/couchdb:/usr/local/etc/couchdb/local.d
+#    restart: always
+
+#  couchdb3:
+#    image: ibmcom/couchdb3:3.1.1
+#    ports:
+#      - "59840:5984"
+#    environment:
+#      - COUCHDB_USER=admin
+#      - COUCHDB_PASSWORD=admin
+#    volumes:
+#      - couchdb3-data:/opt/couchdb/data
+#    restart: always
+
   couchdb:
-    image: couchdb:1.7.2
-    env_file:
-      - config/env/couchdb.env
+    image: ibmcom/couchdb3:3.1.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
     volumes:
-      - couchdb-data:/usr/local/var/lib/couchdb
-      - ./config/couchdb:/usr/local/etc/couchdb/local.d
+      - couchdb3-data:/opt/couchdb/data
     restart: always
 
   tercen:
@@ -60,6 +80,7 @@ services:
     restart: always
 
 volumes:
+  couchdb3-data:
   couchdb-data:
   tercen-data:
   tercen-studio-data:
