@@ -1,7 +1,3 @@
-
-
-
-
 # Introduction
 
 This document describes the installation and usage of [tercen](https://tercen.com/) running on 2 nodes
@@ -18,12 +14,14 @@ Tercen is composed of a number of components.
 - couchdb
 - tercen main service
 - tercen worker service
-
-
+ 
+\
+\
 
 ![tercen-cluster](../../doc/tercen-cluster.png)
 
-
+\
+\
 
 # Install Rook NFS
 
@@ -87,14 +85,14 @@ kubectl label nodes ip-192-168-61-38.eu-central-1.compute.internal app=tercen-wo
 ## Storage
 
 ```shell
-kubectl apply -f k8s/storage/rook/pvc.yaml
+kubectl apply -f examples/k8s/storage/rook/pvc.yaml
 kubectl get pvc
 ```
 
 ## Couchdb
 
 ```shell
-kubectl apply -f k8s/couchdb.yaml
+kubectl apply -f examples/k8s/couchdb.yaml
 ```
 
 ## External Tercen service
@@ -102,7 +100,7 @@ kubectl apply -f k8s/couchdb.yaml
 External Tercen service is a service that is exposed to the internet, here we are using a kubernetes load balancer.
 
 ```shell
-kubectl apply -f k8s/tercen-service-lb.yaml
+kubectl apply -f examples/k8s/tercen-service-lb.yaml
 
 # get tercen service external ip
 kubectl get svc
@@ -121,22 +119,23 @@ Set tercen external ip in config files and the following properties:
 - tercen.public.client.uri
 
 ```shell
-kubectl create configmap tercen-config --from-file=config.yaml=k8s/tercen-config.txt -o yaml --dry-run=client | kubectl apply -f -
-kubectl create configmap tercen-worker-config --from-file=config.yaml=k8s/tercen-worker-config.txt -o yaml --dry-run=client | kubectl apply -f -
+kubectl create configmap tercen-config --from-file=config.yaml=examples/k8s/tercen-config.txt -o yaml --dry-run=client | kubectl apply -f -
+kubectl create configmap tercen-worker-config --from-file=config.yaml=examples/k8s/tercen-worker-config.txt -o yaml --dry-run=client | kubectl apply -f -
 ```
 
 ## Tercen services
 
 ```shell
-kubectl apply -f k8s/tercen.yaml
-kubectl apply -f k8s/tercen-worker.yaml
+kubectl apply -f examples/k8s/tercen.yaml
+kubectl apply -f examples/k8s/tercen-worker.yaml
 
 TERCEN_POD=$(kubectl get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.name}')
 
 kubectl logs $TERCEN_POD tercen
 
-# check if tercen is running
+# check if tercen is running using k8s port forward
 kubectl port-forward $TERCEN_POD 6400:5400
 # http://localhost:6400/
-
 ```
+
+http://tercen-external-ip
