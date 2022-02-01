@@ -74,22 +74,16 @@ kubectl create -f sc.yaml
 ```shell
 kubectl get nodes
 
-#"node.kubernetes.io/instance-type": "m5.large",
-#kubectl label nodes ip-192-168-6-126.eu-central-1.compute.internal node.tercen.com/instance-type=tercen
 kubectl label nodes ip-192-168-6-126.eu-central-1.compute.internal app=tercen
-# kubectl get node ip-192-168-6-126.eu-central-1.compute.internal -o json | jq .metadata.labels 
-
 kubectl label nodes ip-192-168-61-38.eu-central-1.compute.internal app=tercen-worker
-# kubectl get node ip-192-168-61-38.eu-central-1.compute.internal -o json | jq .metadata.labels 
 ```
 
 # Install tercen
 
 ## Storage
+
 ```shell
 kubectl apply -f k8s/storage/rook/pvc.yaml
-# kubectl delete -f k8s/storage/aws/pvc.yaml
-kubectl describe pvc
 kubectl get pvc
 ```
 
@@ -97,10 +91,8 @@ kubectl get pvc
 
 ```shell
 kubectl apply -f k8s/couchdb.yaml
-
-COUCH_POD=$(kubectl get pod -l "app=couchdb" -o jsonpath='{.items[0].metadata.name}')
-kubectl logs $COUCH_POD
 ```
+
 ## External Tercen service
 
 External Tercen service is a service that is exposed to the internet, here we are using a kubernetes load balancer.
@@ -112,8 +104,6 @@ kubectl apply -f k8s/tercen-service-lb.yaml
 kubectl get svc
 
 ```
-
-
 
 ## Tercen config
 
@@ -127,7 +117,6 @@ kubectl create configmap tercen-worker-config --from-file=config.yaml=k8s/tercen
 ## Tercen services
 
 ```shell
-
 kubectl apply -f k8s/tercen.yaml
 kubectl apply -f k8s/tercen-worker.yaml
 
@@ -137,35 +126,6 @@ kubectl logs $TERCEN_POD tercen
 
 # check if tercen is running
 kubectl port-forward $TERCEN_POD 6400:5400
-```
+# http://localhost:6400/
 
-
-# EKS Load balancer
-
-https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
-
-```shell
-aws eks describe-cluster --name tercen-itos2 --query "cluster.identity.oidc.issuer" --output text
-
-curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.3.1/docs/install/iam_policy.json
-aws iam create-policy \
-    --policy-name AWSLoadBalancerControllerIAMPolicy \
-    --policy-document file://iam_policy.json
-    
-eksctl utils associate-iam-oidc-provider --cluster tercen-itos2 --approve
-    
-eksctl create iamserviceaccount \
-  --cluster=tercen-itos2 \
-  --namespace=kube-system \
-  --name=aws-load-balancer-controller \
-  --attach-policy-arn=arn:aws:iam::605893565571:policy/AWSLoadBalancerControllerIAMPolicy \
-  --override-existing-serviceaccounts \
-  --approve
-
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  -n kube-system \
-  --set image.repository=602401143452.dkr.ecr.eu-central-1.amazonaws.com/amazon/aws-load-balancer-controller \
-  --set clusterName=cluster-name \
-  --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller
 ```
