@@ -1,0 +1,90 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tercen-service
+spec:
+  type: NodePort
+  selector:
+    app: tercen
+  ports:
+    - port: 5400
+      nodePort: 30054
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tercen-deployment
+  labels:
+    app: tercen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tercen
+  template:
+    metadata:
+      labels:
+        app: tercen
+    spec:
+      restartPolicy: Always
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - tercen
+      volumes:
+        - name: tercen-config
+          configMap:
+            name: tercen-config
+        - name: tercen-tmp
+          hostPath:
+            path: /tmp/tercen
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: tercen-data
+          persistentVolumeClaim:
+            claimName: tercen-data-pvc
+        - name: tercen-renv
+          persistentVolumeClaim:
+            claimName: tercen-renv-pvc
+        - name: tercen-operator
+          persistentVolumeClaim:
+            claimName: tercen-operator-pvc
+      containers:
+        - name: tercen
+          image: tercen/tercen:latest
+          imagePullPolicy: Always
+          env:
+            - name: tercen.worker.public.ip
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: tercen.worker.webapp.ip
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 5400
+              name: tercen
+          volumeMounts:
+            - name: tercen-tmp
+              mountPath: /tmp
+              readOnly: false
+            - name: tercen-config
+              mountPath: /etc/tercen
+            - name: tercen-data
+              mountPath: /var/lib/tercen/data
+              readOnly: false
+            - name: tercen-operator
+              mountPath: /var/lib/tercen/data/operator
+              readOnly: false
+            - name: tercen-renv
+              mountPath: /var/lib/tercen/data/renv/
+              readOnly: false
+
+

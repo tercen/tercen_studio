@@ -19,20 +19,20 @@ k3d cluster create -p "8080:80@loadbalancer" --volume /var/lib/rancher/k3s/stora
 # kubectl get nodes
 
 kubectl create namespace argocd
+# kubectl delete namespace argocd
  
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl delete -n argocd -f examples/k3d/argocd/install.yaml
-kubectl apply -n argocd -f examples/k3d/argocd/install.yaml
-kubectl apply -n argocd -f examples/k3d/argocd/argocd-cmd-params-cm.yaml
-kubectl -n argocd get configmap argocd-cmd-params-cm -o yaml
+#kubectl delete -n argocd -f examples/k3d/argocd/install.yaml
+#kubectl apply -n argocd -f examples/k3d/argocd/install.yaml
+#kubectl apply -n argocd -f examples/k3d/argocd/argocd-cmd-params-cm.yaml
+#kubectl -n argocd get configmap argocd-cmd-params-cm -o yaml
 
 kubectl -n argocd get pods -w
-kubectl -n argocd delete pod argocd-server-bc59fd78c-fqwf6
-
-kubectl -n argocd logs argocd-server-6bc7b6f869-bvl72 -f
+#kubectl -n argocd delete pod argocd-server-bc59fd78c-fqwf6
+#kubectl -n argocd logs argocd-server-6bc7b6f869-bvl72 -f
 
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-# 7XIUYDSM4WHTJBNz
+# 53LzPBC9drSCS3Ra
  
 http://127.0.0.1:8080/argocd
 
@@ -55,12 +55,17 @@ kubectl apply -f examples/k3d/app.yaml
 kubectl delete -f examples/k3d/app.yaml
  
 
-argocd login 127.0.0.1:8080
+argocd login 127.0.0.1:8081
  
 argocd app get tercen-studio
 argocd app sync tercen-studio
 
-kubectl --namespace tercen-studio get pods
+kubectl --namespace tercen-studio get pod
+kubectl --namespace tercen-studio get svc
+
+TERCEN_POD=$(kubectl --namespace tercen-studio get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.name}')
+kubectl logs --namespace tercen-studio $TERCEN_POD tercen -f
+kubectl --namespace tercen-studio port-forward $TERCEN_POD 5600:5400
 
 ```
 
@@ -93,6 +98,5 @@ TERCEN_POD=$(kubectl get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.na
 kubectl logs $TERCEN_POD tercen -f
 kubectl port-forward $TERCEN_POD 54000:5400
 kubectl exec -it $TERCEN_POD tercen -- bash
-
 
  ```

@@ -1,0 +1,37 @@
+configs:
+  - domain: ''
+    hosts:
+      - 127.0.0.1
+      - tercen-service
+      - aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+    config:
+      tercen.auth.cookie.domain: aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+
+# ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
+tercen.log.level: '0'
+tercen.secret: "4ab70b11-d7bd-9998-958f-01b7ac4e9555"
+
+tercen.allow.untrusted.git: 'false'
+tercen.allow.untrusted.docker: 'false'
+
+tercen.test.password: test
+tercen.admin.password: admin
+tercen.worker.password: admin
+
+#tercen.github.token: xxx
+#tercen.auth.client.id.google: 'xxxx.apps.googleusercontent.com'
+#tercen.auth.client.secret.google: 'xxxxx'
+
+tercen.user.sign.up: 'false'
+tercen.public.uri: http://aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+tercen.public.client.uri: http://aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+
+#tercen.smtp.username: info@xxx.com
+#tercen.smtp.password: xxxx
+
+tercen.couchdb.address: couchdb
+tercen.couchdb.user: admin
+tercen.couchdb.password: admin
+
+tercen.worker.isolates: "0"
+tercen.ws.compression: "on"
