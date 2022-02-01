@@ -19,7 +19,11 @@ Tercen is composed of a number of components.
 - tercen main service
 - tercen worker service
 
+
+
 ![tercen-cluster](../../doc/tercen-cluster.png)
+
+
 
 # Install Rook NFS
 
@@ -107,7 +111,14 @@ kubectl get svc
 
 ## Tercen config
 
-Set tercen external ip in config files.
+Set tercen external ip in config files and the following properties:
+
+- tercen.admin.password
+- tercen.secret
+- tercen.auth.cookie.domain
+- tercen.test.password
+- tercen.public.uri
+- tercen.public.client.uri
 
 ```shell
 kubectl create configmap tercen-config --from-file=config.yaml=k8s/tercen-config.txt -o yaml --dry-run=client | kubectl apply -f -
