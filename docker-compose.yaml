@@ -1,26 +1,6 @@
 version: "3.2"
 services:
 
-#  couchdb:
-#    image: couchdb:1.7.2
-#    env_file:
-#      - config/env/couchdb.env
-#    volumes:
-#      - couchdb-data:/usr/local/var/lib/couchdb
-#      - ./config/couchdb:/usr/local/etc/couchdb/local.d
-#    restart: always
-
-#  couchdb3:
-#    image: ibmcom/couchdb3:3.1.1
-#    ports:
-#      - "59840:5984"
-#    environment:
-#      - COUCHDB_USER=admin
-#      - COUCHDB_PASSWORD=admin
-#    volumes:
-#      - couchdb3-data:/opt/couchdb/data
-#    restart: always
-
   couchdb:
     image: ibmcom/couchdb3:3.1.1
     environment:
@@ -33,14 +13,9 @@ services:
   tercen:
     links:
       - couchdb
-    # see : https://hub.docker.com/r/tercen/tercen/tags?page=1&ordering=last_updated
-    # for specific version
-    #    image: tercen/tercen:prod
-    image: tercen/tercen:0.5.89-1
+    image: tercen/tercen:0.6
     ports:
       - "5402:5400"
-    #    environment:
-    #      - TERCEN_R_OPERATOR_RUN_TEST=false
     env_file:
       - config/env/couchdb.env
     volumes:
@@ -81,7 +56,6 @@ services:
 
 volumes:
   couchdb3-data:
-  couchdb-data:
   tercen-data:
   tercen-studio-data:
   tercen-studio-renv:
