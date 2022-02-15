@@ -16,6 +16,7 @@ tercen.couchdb.initialize: 'false'
 tercen.admin.password: admin
 tercen.worker.password: admin
 tercen.couchdb.address: couchdb
+tercen.couchdb.password: admin
 tercen.r.operator.build: local
 tercen.gc.interval: '-1'
 tercen.client.uri: http://tercen-service:5400
