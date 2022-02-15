@@ -13,7 +13,9 @@ curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v5.2
 k3d cluster create --volume /var/lib/rancher/k3s/storage:/var/lib/rancher/k3s/storage
 
 k3d cluster create -p "8080:80@loadbalancer" --volume /var/lib/rancher/k3s/storage:/var/lib/rancher/k3s/storage
-
+k3d cluster list
+k3d cluster stop k3s-default
+#k3d cluster delete k3s-default
 #k3d cluster create my-cluster --api-port 6443 -p 8080:80@loadbalancer --agents 2
 # kubectl cluster-info
 # kubectl get nodes
