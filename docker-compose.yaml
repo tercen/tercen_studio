@@ -16,8 +16,6 @@ services:
     image: tercen/tercen:0.6
     ports:
       - "5402:5400"
-    env_file:
-      - config/env/couchdb.env
     volumes:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
