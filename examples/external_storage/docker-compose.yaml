@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+
+  couchdb:
+    image: ibmcom/couchdb3:3.1.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    volumes:
+      - couchdb3-data:/opt/couchdb/data
+    restart: always
+
+  tercen:
+    image: tercen/tercen:latest
+    ports:
+      - "5402:5400"
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+      - ./config/tercen:/etc/tercen
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/tercen/external/read:/var/lib/tercen/external/read
+      - /var/lib/tercen/external/write:/var/lib/tercen/external/write
+    restart: always
+
+  runtime-r35:
+    image: tercen/runtime-r35:3.5.3-5
+    volumes:
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+    restart: always
+
+  runtime-r40:
+    image: tercen/runtime-r40:4.0.4-2
+    volumes:
+      - tercen-operator:/var/lib/tercen/data/operator/
+      - tercen-renv:/var/lib/tercen/data/renv/
+    restart: always
+
+# docker network create tercen
+# see in config file property
+# tercen.docker.network: tercen
+networks:
+  default:
+    external: true
+    name: tercen
+
+volumes:
+  couchdb3-data:
+  tercen-data:
+  tercen-operator:
+  tercen-renv:

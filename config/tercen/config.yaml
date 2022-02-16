@@ -20,12 +20,6 @@ tercen.worker.webapp.ip: runtime
 tercen.public.uri: http://tercen:5400
 tercen.public.client.uri: http://tercen:5400
 
-#tercen.client.uri: http://tercen:5400
-#tercen.public.uri: http://172.17.0.1:5402
-#tercen.public.client.uri: http://172.17.0.1:5402
-#tercen.worker.public.ip: 172.17.0.1
-#tercen.worker.ip: tercen
-#tercen.worker.webapp.ip: runtime
 # default true, accept any imag
 #tercen.allow.untrusted.docker: 'false'
 

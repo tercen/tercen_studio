@@ -1,0 +1,49 @@
+configs:
+  - domain: ''
+    hosts:
+      - 127.0.0.1
+      - tercen
+    config:
+      tercen.log.level: '0'
+# ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
+# tercen.log.level: '700'
+tercen.log.level: '0'
+
+tercen.external.storage.enabled: 'true'
+#tercen.external.storage.read.path: '/var/lib/tercen/external/read'
+#tercen.external.storage.write.path: '/var/lib/tercen/external/write'
+
+# use to pad password before hashing
+tercen.secret: "f1afc1b3-0782-41da-9cd0-5a094f940074"
+tercen.test.password: test
+tercen.admin.password: admin
+tercen.worker.password: admin
+
+tercen.docker.network: tercen
+tercen.client.uri: http://tercen:5400
+tercen.worker.public.ip: tercen
+tercen.worker.ip: tercen
+tercen.worker.webapp.ip: runtime
+tercen.public.uri: http://tercen:5400
+tercen.public.client.uri: http://tercen:5400
+
+tercen.couchdb.address: couchdb
+
+tercen.smtp.username: xxx@xxx.com
+tercen.smtp.password: xxxx
+
+tercen.allow.untrusted.git: 'false'
+
+# will use all available cpu and memory
+tercen.worker.proc.override: 'true'
+tercen.worker.proc.override.isolates.cpu.ratio: '1.0'
+
+tercen.ws.compression: "on"
+
+DefaultProfiles:
+- 2.api.profile
+- 2.table.profile
+- 2.cpuTime.profile
+- 2.storage.profile
+- 2.run.profile
+
