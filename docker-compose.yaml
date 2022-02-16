@@ -1,4 +1,5 @@
-version: "3.2"
+version: "3.9"
+
 services:
 
   couchdb:
@@ -11,9 +12,8 @@ services:
     restart: always
 
   tercen:
-    links:
-      - couchdb
     image: tercen/tercen:0.6
+#    image: tercen/tercen:latest
     ports:
       - "5402:5400"
     volumes:
@@ -35,22 +35,25 @@ services:
     restart: always
 
   tercen_studio:
-    links:
-      - tercen
     image: tercen/tercen_studio:4.0.4-0
     ports:
       - "8787:8787"
     environment:
-      - FORCE_RECREATE=7
       - PASSWORD=tercen
     volumes:
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
-    # sharing gitconfig can be usefull
-    #      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
+
+# docker network create tercen
+# see in config file property
+# tercen.docker.network: tercen
+networks:
+  default:
+    external: true
+    name: tercen
 
 volumes:
   couchdb3-data:

@@ -14,6 +14,12 @@ Activate shared drives (Windows and Mac only)
 * right click on the running docker service and select "settings">"shared drives"
 * share the folder tercen_studio 
 
+Create tercen network
+
+```shell
+docker network create tercen
+```
+
 Then start tercen ...
 
 ```bash
@@ -56,7 +62,7 @@ docker-compose down
 # check tercen docker volumes names
 docker volume ls
 # delete tercen docker volumes
-docker volume rm tercen_studio_couchdb-data
+docker volume rm tercen_studio_couchdb3-data
 docker volume rm tercen_studio_tercen-data
 docker volume rm tercen_studio_tercen-studio-data
 docker volume rm tercen_studio_tercen-studio-renv
@@ -97,10 +103,4 @@ Then restart tercen
 docker-compose down        
 # start tercen_studio
 docker-compose up -d
-```
-
-# utils
-
-```shell
-sudo chown -R me:mygroup ./config
 ```
