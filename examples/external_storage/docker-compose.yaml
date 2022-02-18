@@ -39,18 +39,18 @@ services:
       - tercen-renv:/var/lib/tercen/data/renv/
     restart: always
 
-#  tercen_studio:
-#    image: tercen/tercen_studio:4.0.4-0
-#    ports:
-#      - "8787:8787"
-#    environment:
-#      - PASSWORD=tercen
-#    volumes:
-#      - tercen-studio-renv:/home/rstudio/.local/share/renv
-#      - tercen-studio-data:/home/rstudio/projects
-#      - ./../../config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
-#      - ./../../config/tercen-studio/examples:/home/rstudio/projects/examples
-#    restart: always
+  tercen_studio:
+    image: tercen/tercen_studio:4.0.4-0
+    ports:
+      - "8787:8787"
+    environment:
+      - PASSWORD=tercen
+    volumes:
+      - tercen-studio-renv:/home/rstudio/.local/share/renv
+      - tercen-studio-data:/home/rstudio/projects
+      - ./../../config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
+      - ./../../config/tercen-studio/examples:/home/rstudio/projects/examples
+    restart: always
 
 # docker network create tercen
 # see in config file property
@@ -65,5 +65,5 @@ volumes:
   tercen-data:
   tercen-operator:
   tercen-renv:
-#  tercen-studio-data:
-#  tercen-studio-renv:
+  tercen-studio-data:
+  tercen-studio-renv:
