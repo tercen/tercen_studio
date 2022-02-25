@@ -12,7 +12,7 @@ services:
     restart: always
 
   tercen:
-    image: tercen/tercen:0.6
+    image: tercen/tercen:0.7.6
 #    image: tercen/tercen:latest
     ports:
       - "5402:5400"
