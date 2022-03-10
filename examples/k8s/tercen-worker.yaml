@@ -32,8 +32,7 @@ spec:
           configMap:
             name: tercen-worker-config
         - name: tercen-tmp
-          hostPath:
-            path: /tmp/tercen
+          emptyDir: {}
         - name: dockersock
           hostPath:
             path: /var/run/docker.sock
