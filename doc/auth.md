@@ -19,6 +19,19 @@ The secret key can be change in tercen config file.
 tercen.secret: "3ab70b11-d7bd-4097-958f-01b7ac4e955f"
 ```
 
+# SAML
+
+To use SAML authentication the following properties need to be configured in tercen config file.
+
+```yaml
+tercen.auth.method: 'saml'
+tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
+tercen.saml.idp.issuer: https://sts.windows.net/5b5c94c6-14cf-42da-85bc-4e08722b253b/
+tercen.saml.audience: https://my.tercen.com/_service/sso/auth/saml
+tercen.saml.binding.url: https://login.microsoftonline.com/5b5c94c6-14cf-42da-85bc-4e08722b253b/saml2
+tercen.saml.certificate.file: /etc/tercen/saml/cert.pem
+```
+
 # ldap
 
 To use ldap for authentication set the following in ./config/tercen.config.yaml file.
