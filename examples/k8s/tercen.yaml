@@ -37,6 +37,9 @@ spec:
                     values:
                       - tercen
       volumes:
+        - name: tercen-saml-cert
+          configMap:
+            name: tercen-saml-cert
         - name: tercen-config
           configMap:
             name: tercen-config
@@ -76,6 +79,8 @@ spec:
               readOnly: false
             - name: tercen-config
               mountPath: /etc/tercen
+            - name: tercen-saml-cert
+              mountPath: /etc/tercen/saml
             - name: tercen-data
               mountPath: /var/lib/tercen/data
               readOnly: false

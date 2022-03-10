@@ -123,6 +123,14 @@ kubectl create configmap tercen-config --from-file=config.yaml=examples/k8s/terc
 kubectl create configmap tercen-worker-config --from-file=config.yaml=examples/k8s/tercen-worker-config.txt -o yaml --dry-run=client | kubectl apply -f -
 ```
 
+## SAML config
+
+```shell
+kubectl create configmap tercen-saml-cert \
+  --from-file=cert.pem=examples/k8s/sso/saml/cert.pem -o yaml --dry-run=client | kubectl apply -f -
+
+```
+
 ## Tercen services
 
 ```shell

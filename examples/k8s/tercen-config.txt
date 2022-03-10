@@ -11,6 +11,13 @@ configs:
 tercen.log.level: '0'
 tercen.secret: "4ab70b11-d7bd-9998-958f-01b7ac4e9555"
 
+#tercen.auth.method: 'saml'
+#tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
+#tercen.saml.idp.issuer: https://sts.windows.net/5b5c94c6-14cf-42da-85bc-4e08722b253b/
+#tercen.saml.audience: https://my.tercen.com/_service/sso/auth/saml
+#tercen.saml.binding.url: https://login.microsoftonline.com/5b5c94c6-14cf-42da-85bc-4e08722b253b/saml2
+#tercen.saml.certificate.file: /etc/tercen/saml/cert.pem
+
 tercen.allow.untrusted.git: 'false'
 tercen.allow.untrusted.docker: 'false'
 
