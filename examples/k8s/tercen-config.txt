@@ -21,6 +21,9 @@ tercen.secret: "4ab70b11-d7bd-9998-958f-01b7ac4e9555"
 tercen.allow.untrusted.git: 'false'
 tercen.allow.untrusted.docker: 'false'
 
+#tercen.trusted.git:
+#  - 'https://github.com/tercen/'
+
 tercen.test.password: test
 tercen.admin.password: admin
 tercen.worker.password: admin
