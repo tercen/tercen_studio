@@ -42,7 +42,7 @@ services:
     restart: always
 
   runtime-r35:
-    image: tercen/runtime-r35:3.5.3-5
+    image: tercen/runtime-r35:3.5.3-6
     networks:
       tercen:
         aliases:

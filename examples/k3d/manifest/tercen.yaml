@@ -82,7 +82,7 @@ spec:
             - name: dockersock
               mountPath: /var/run/docker.sock
         - name: runtime-r35
-          image: tercen/runtime-r35:3.5.3-5
+          image: tercen/runtime-r35:3.5.3-6
           imagePullPolicy: Always
           volumeMounts:
             - name: tercen-tmp

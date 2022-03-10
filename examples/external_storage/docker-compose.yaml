@@ -26,7 +26,7 @@ services:
     restart: always
 
   runtime-r35:
-    image: tercen/runtime-r35:3.5.3-5
+    image: tercen/runtime-r35:3.5.3-6
     volumes:
       - tercen-operator:/var/lib/tercen/data/operator/
       - tercen-renv:/var/lib/tercen/data/renv/
