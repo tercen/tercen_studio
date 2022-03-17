@@ -206,5 +206,5 @@ TERCEN_POD=$(kubectl get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.na
 TERCEN_WORKER_POD=$(kubectl get pod -l "app=tercen-worker" -o jsonpath='{.items[0].metadata.name}')
 
 kubectl logs --tail=2000 -f $TERCEN_POD tercen
-kubectl logs --tail=2000 -f $TERCEN_WORKER_POD tercen
+kubectl logs --tail=2000 -f $TERCEN_WORKER_POD tercen-worker
 ```
