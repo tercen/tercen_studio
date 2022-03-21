@@ -42,6 +42,7 @@ services:
     environment:
       - PASSWORD=tercen
     volumes:
+      - /var/lib/tercen/share:/var/lib/tercen/share
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
