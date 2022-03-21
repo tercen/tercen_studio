@@ -17,6 +17,7 @@ services:
     ports:
       - "5402:5400"
     volumes:
+      - /var/lib/tercen/external:/var/lib/tercen/external
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
       - /var/run/docker.sock:/var/run/docker.sock
