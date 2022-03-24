@@ -33,9 +33,13 @@ spec:
             name: tercen-worker-config
         - name: tercen-tmp
           emptyDir: {}
-        - name: dockersock
-          hostPath:
-            path: /var/run/docker.sock
+        - name: var-run
+          emptyDir: {}
+        - name: var-lib-docker
+          persistentVolumeClaim:
+            claimName: tercen-var-lib-docker-pvc
+#          hostPath:
+#            path: /tercen/runtime/var/lib/docker
         - name: tercen-data
           persistentVolumeClaim:
             claimName: tercen-data-pvc
@@ -59,7 +63,7 @@ spec:
             - name: tercen.worker.public.ip
               valueFrom:
                 fieldRef:
-                  fieldPath: status.hostIP
+                  fieldPath: status.podIP
             - name: tercen.worker.ip
               valueFrom:
                 fieldRef:
@@ -82,31 +86,44 @@ spec:
             - name: tercen-operator
               mountPath: /var/lib/tercen/data/operator/
               readOnly: false
-            - name: dockersock
-              mountPath: /var/run/docker.sock
+            - name: var-run
+              mountPath: /var/run/
+        - name: runtime-docker
+          image: docker:20.10.9-dind-alpine3.14
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: var-run
+              mountPath: /var/run
+              readOnly: false
+            - name: var-lib-docker
+              mountPath: /var/lib/docker
+              readOnly: false
+            - name: tercen-tmp
+              mountPath: /tmp
+            - name: tercen-operator
+              mountPath: /var/lib/tercen/data/operator/
+              readOnly: false
+            - name: tercen-renv
+              mountPath: /var/lib/tercen/data/renv/
+              readOnly: false
+#            - name: tercen-external
+#              mountPath: /var/lib/tercen/external/
+#              readOnly: false
         - name: runtime-r35
-          image: tercen/runtime-r35:3.5.3-6
+          image: docker:20.10
           imagePullPolicy: Always
           volumeMounts:
-            - name: tercen-tmp
-              mountPath: /tmp
-              readOnly: false
-            - name: tercen-operator
-              mountPath: /var/lib/tercen/data/operator/
-              readOnly: false
-            - name: tercen-renv
-              mountPath: /var/lib/tercen/data/renv/
-              readOnly: false
+            - name: var-run
+              mountPath: /var/run
+          command: [ "sh" ]
+          args: [ "-c", "docker rm -f runtime-r35 || true && docker run --rm --name runtime-r35 --network host -v /var/lib/tercen/data/operator:/var/lib/tercen/data/operator -v /var/lib/tercen/data/renv:/var/lib/tercen/data/renv -v /tmp:/tmp tercen/runtime-r35:3.5.3-6" ]
         - name: runtime-r40
-          image: tercen/runtime-r40:4.0.4-1
+          image: docker:20.10
           imagePullPolicy: Always
           volumeMounts:
-            - name: tercen-tmp
-              mountPath: /tmp
-              readOnly: false
-            - name: tercen-operator
-              mountPath: /var/lib/tercen/data/operator/
-              readOnly: false
-            - name: tercen-renv
-              mountPath: /var/lib/tercen/data/renv/
-              readOnly: false
+            - name: var-run
+              mountPath: /var/run
+          command: [ "sh" ]
+          args: [ "-c", "docker rm -f runtime-r40 || true && docker run --rm --name runtime-r40 --network host -v /var/lib/tercen/data/operator:/var/lib/tercen/data/operator -v /var/lib/tercen/data/renv:/var/lib/tercen/data/renv -v /tmp:/tmp tercen/runtime-r40:4.0.4-1" ]

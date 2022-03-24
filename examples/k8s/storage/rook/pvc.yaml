@@ -44,3 +44,15 @@ spec:
   resources:
     requests:
       storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tercen-var-lib-docker-pvc
+spec:
+  storageClassName: "rook-nfs-share1"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
