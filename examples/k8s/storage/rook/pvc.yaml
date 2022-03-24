@@ -50,9 +50,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: tercen-var-lib-docker-pvc
 spec:
-  storageClassName: "rook-nfs-share1"
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 50Gi
