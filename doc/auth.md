@@ -52,7 +52,7 @@ Tercen config
 tercen.auth.method: 'saml'
 tercen.saml.request.issuer: http://tercen01:5400/_service/sso/auth/saml
 tercen.saml.audience: http://tercen01:5400/_service/sso/auth/saml
-tercen.saml.idp.issuer: http://127.0.0.1:5480/auth/realms/master/protocol/saml
+tercen.saml.idp.issuer: http://127.0.0.1:5480/auth/realms/master
 tercen.saml.binding.url: http://127.0.0.1:5480/auth/realms/master/protocol/saml
 tercen.saml.certificate.file: /home/alex/.config/tercen/cert.pem
 ```
