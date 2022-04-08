@@ -49,6 +49,7 @@ docker run -d --name keycloak -p 5480:8080 \
 Tercen config 
 
 ```yaml
+tercen.auth.method: 'saml'
 tercen.saml.request.issuer: http://tercen01:5400/_service/sso/auth/saml
 tercen.saml.audience: http://tercen01:5400/_service/sso/auth/saml
 tercen.saml.idp.issuer: http://127.0.0.1:5480/auth/realms/master/protocol/saml
