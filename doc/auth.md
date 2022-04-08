@@ -23,6 +23,8 @@ tercen.secret: "3ab70b11-d7bd-4097-958f-01b7ac4e955f"
 
 To use SAML authentication the following properties need to be configured in tercen config file.
 
+## Azure AD
+
 ```yaml
 tercen.auth.method: 'saml'
 tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
@@ -31,7 +33,36 @@ tercen.saml.audience: https://my.tercen.com/_service/sso/auth/saml
 tercen.saml.binding.url: https://login.microsoftonline.com/5b5c94c6-14cf-42da-85bc-4e08722b253b/saml2
 tercen.saml.certificate.file: /etc/tercen/saml/cert.pem
 ```
+## Keycloak
 
+
+```shell
+mkdir /home/alex/dev/keycloak/data
+# running keycloak in port 5480
+docker run -d --name keycloak -p 5480:8080 \
+      -e KEYCLOAK_USER=admin \
+      -e KEYCLOAK_PASSWORD=admin \
+      -v /home/alex/dev/keycloak/data:/opt/jboss/keycloak/standalone/data/ \
+      quay.io/keycloak/keycloak:16.1.1
+```
+
+Tercen config 
+
+```yaml
+tercen.saml.request.issuer: http://tercen01:5400/_service/sso/auth/saml
+tercen.saml.audience: http://tercen01:5400/_service/sso/auth/saml
+tercen.saml.idp.issuer: http://127.0.0.1:5480/auth/realms/master/protocol/saml
+tercen.saml.binding.url: http://127.0.0.1:5480/auth/realms/master/protocol/saml
+tercen.saml.certificate.file: /home/alex/.config/tercen/cert.pem
+```
+
+Keycloak setting
+```text
+- Name ID Format : is set to email.
+- Client Signature Required : is off
+```
+
+## PEM certificate
 Here is an example of PEM certificate :
 
 ```text
@@ -52,6 +83,8 @@ eaoCql0ZfhGh2Y5xD80rzHb6mpjMp7weJfEJ4w2QcO1iKn7hP6hn7UrU97/+BiUfneh3E8s2T5wV
 Si4fVLNr4sYh107TfGFC
 -----END CERTIFICATE-----
 ```
+
+
 
 # ldap
 
