@@ -1,8 +1,19 @@
 version: "3.9"
 
+networks:
+  tercen:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.42.0.0/16
+
 services:
 
   couchdb:
+    networks:
+      tercen:
+        aliases:
+          - couchdb
     image: ibmcom/couchdb3:3.1.1
     environment:
       - COUCHDB_USER=admin
@@ -12,10 +23,14 @@ services:
     restart: always
 
   tercen:
+    networks:
+      tercen:
+        ipv4_address: 172.42.0.42
+        aliases:
+          - tercen
     image: tercen/tercen:0.9.13
-    #    image: tercen/tercen:latest
     ports:
-      - "5402:5400"
+      - 5402:5400
     volumes:
       - /var/lib/tercen/external:/var/lib/tercen/external
       - tercen-data:/var/lib/tercen/data
@@ -26,6 +41,10 @@ services:
   runtime-docker:
     privileged: true
     image: docker:20.10.9-dind-alpine3.14
+    networks:
+      tercen:
+        aliases:
+          - runtime-docker
     volumes:
       - var-run:/var/run
       - var-lib-docker:/var/lib/docker
@@ -37,7 +56,7 @@ services:
   tercen_studio:
     image: tercen/tercen_studio:4.0.4-0
     ports:
-      - "8787:8787"
+      - 8787:8787
     environment:
       - PASSWORD=tercen
     volumes:

@@ -1,27 +1,19 @@
 configs:
   - domain: ''
     hosts:
+      - 172.42.0.42
       - 127.0.0.1
-      - tercen
     config:
       tercen.auth.cookie.domain: 127.0.0.1
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
-tercen.log.level: '0'
+tercen.log.level: '700'
 tercen.couchdb.address: couchdb
 tercen.couchdb.user: admin
 tercen.couchdb.password: admin
 
-tercen.client.uri: http://tercen:5400
-tercen.worker.ip: tercen
+tercen.client.uri: http://172.42.0.42:5400
+tercen.worker.ip: 172.42.0.42
 tercen.worker.runtime.ip: runtime-docker
-
-#tercen.docker.network: tercen
-#tercen.client.uri: http://tercen:5400
-#tercen.worker.public.ip: tercen
-#tercen.worker.ip: tercen
-#tercen.worker.webapp.ip: runtime
-#tercen.public.uri: http://tercen:5400
-#tercen.public.client.uri: http://tercen:5400
 
 tercen.external.storage.enabled: 'true'
 ## external.storage path must the same on the host and in the container
