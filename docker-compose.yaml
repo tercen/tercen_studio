@@ -54,6 +54,10 @@ services:
     restart: always
 
   tercen_studio:
+    networks:
+      tercen:
+        aliases:
+          - tercen_studio
     image: tercen/tercen_studio:4.0.4-0
     ports:
       - 8787:8787
