@@ -11,13 +11,17 @@ tercen.couchdb.address: couchdb
 tercen.couchdb.user: admin
 tercen.couchdb.password: admin
 
-tercen.docker.network: tercen
 tercen.client.uri: http://tercen:5400
-tercen.worker.public.ip: tercen
 tercen.worker.ip: tercen
-tercen.worker.webapp.ip: runtime
-tercen.public.uri: http://tercen:5400
-tercen.public.client.uri: http://tercen:5400
+tercen.worker.runtime.ip: runtime-docker
+
+#tercen.docker.network: tercen
+#tercen.client.uri: http://tercen:5400
+#tercen.worker.public.ip: tercen
+#tercen.worker.ip: tercen
+#tercen.worker.webapp.ip: runtime
+#tercen.public.uri: http://tercen:5400
+#tercen.public.client.uri: http://tercen:5400
 
 tercen.external.storage.enabled: 'true'
 ## external.storage path must the same on the host and in the container

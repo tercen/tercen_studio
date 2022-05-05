@@ -12,27 +12,26 @@ services:
     restart: always
 
   tercen:
-    image: tercen/tercen:0.8.5
-#    image: tercen/tercen:latest
+    image: tercen/tercen:0.9.13
+    #    image: tercen/tercen:latest
     ports:
       - "5402:5400"
     volumes:
       - /var/lib/tercen/external:/var/lib/tercen/external
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-      - /var/run/docker.sock:/var/run/docker.sock
+      - var-run:/var/run
     restart: always
 
-  runtime-r35:
-    image: tercen/runtime-r35:3.5.3-6
+  runtime-docker:
+    privileged: true
+    image: docker:20.10.9-dind-alpine3.14
     volumes:
+      - var-run:/var/run
+      - var-lib-docker:/var/lib/docker
       - tercen-data:/var/lib/tercen/data
-    restart: always
-
-  runtime-r40:
-    image: tercen/runtime-r40:4.0.4-1
-    volumes:
-      - tercen-data:/var/lib/tercen/data
+      - /var/lib/tercen/external:/var/lib/tercen/external
+      - tmp:/tmp
     restart: always
 
   tercen_studio:
@@ -49,16 +48,11 @@ services:
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
     restart: always
 
-# docker network create tercen
-# see in config file property
-# tercen.docker.network: tercen
-networks:
-  default:
-    external: true
-    name: tercen
-
 volumes:
   couchdb3-data:
   tercen-data:
   tercen-studio-data:
   tercen-studio-renv:
+  var-lib-docker:
+  var-run:
+  tmp:
