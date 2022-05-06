@@ -77,6 +77,9 @@ docker push tercen/tercen_studio:4.0.4-0
 docker build -t tercen/tercen_studio:3.5.3-1 docker/r35
 docker push tercen/tercen_studio:3.5.3-1
 
+docker build -t tercen/tercen_studio_flowsuite:3.15-1 docker/flowsuite
+docker push -t tercen/tercen_studio_flowsuite:3.15-1
+
 docker build -t tercen/docker_operator docker/docker_operator
 docker build -t tercen/docker_operator .
 
