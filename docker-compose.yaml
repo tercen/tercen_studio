@@ -28,7 +28,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.9.13
+    image: tercen/tercen:0.9.17
     ports:
       - 5402:5400
     volumes:
