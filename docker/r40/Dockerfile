@@ -38,11 +38,12 @@ RUN mkdir -p /home/rstudio/projects
 RUN mkdir -p /home/rstudio/.local/share/renv
 
 RUN R -e "install.packages(c('renv'))"
-RUN echo "install tercen 0.10.8"
+RUN echo "install tercen 0.12.8"
 RUN R -e "install.packages('tercen')"
-RUN R -e "install.packages('reticulate')"
-#RETICULATE_MINICONDA_PATH
-#RUN R -e "reticulate::install_miniconda()"
+RUN R -e "install.packages('tercenApi')"
+# RUN R -e "install.packages('reticulate')"
+# RETICULATE_MINICONDA_PATH
+# RUN R -e "reticulate::install_miniconda()"
 
 USER root
 

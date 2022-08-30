@@ -71,8 +71,8 @@ docker volume rm tercen_studio_tercen-studio-renv
 # Build
 
 ```bash
-docker build -t tercen/tercen_studio:4.0.4-0 docker/r40
-docker push tercen/tercen_studio:4.0.4-0
+docker build -t tercen/tercen_studio:4.0.4-1 docker/r40
+docker push tercen/tercen_studio:4.0.4-1
 
 docker build -t tercen/tercen_studio:3.5.3-1 docker/r35
 docker push tercen/tercen_studio:3.5.3-1
