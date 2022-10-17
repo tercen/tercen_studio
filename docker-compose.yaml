@@ -58,8 +58,8 @@ services:
       tercen:
         aliases:
           - tercen_studio
-    image: tercen/tercen_studio:4.0.4-1
-    # image: tercen/tercen_studio_flowsuite:3.15-1
+    image: tercen/tercen-studio:4.0.4-1
+    # image: tercen/tercen-studio-flowsuite:3.15-1
     ports:
       - 8787:8787
     environment:

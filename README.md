@@ -71,17 +71,14 @@ docker volume rm tercen_studio_tercen-studio-renv
 # Build
 
 ```bash
-docker build -t tercen/tercen_studio:4.0.4-1 docker/r40
-docker push tercen/tercen_studio:4.0.4-1
+git tag tercen-studio_3.5.3-1
+git push --tags
 
-docker build -t tercen/tercen_studio:3.5.3-1 docker/r35
-docker push tercen/tercen_studio:3.5.3-1
+git tag tercen-studio_4.0.4-1
+git push --tags
 
-docker build -t tercen/tercen_studio_flowsuite:3.15-1 docker/flowsuite
-docker push -t tercen/tercen_studio_flowsuite:3.15-1
-
-docker build -t tercen/docker_operator docker/docker_operator
-docker build -t tercen/docker_operator .
+git tag tercen-studio-flowsuite_3.15-1
+git push --tags
 
 docker run -it --rm -v /home/alex/dev/tercen/tercen_studio/:/root/mydevfolder tercen/docker_operator bash
 ```

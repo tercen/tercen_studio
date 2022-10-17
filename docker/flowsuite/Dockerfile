@@ -35,13 +35,14 @@ RUN mkdir -p /home/rstudio/.local/share/renv
 
 RUN R -e "install.packages(c('renv'))"
 RUN echo "install tercen 0.10.8"
-RUN R -e "remotes::install_github('tercen/tim', ref = '0.0.4')"
-RUN R -e "remotes::install_github('tercen/teRcen', ref='0.12.3')"
+RUN R -e "remotes::install_github('tercen/tim', ref = '0.0.20')"
+RUN R -e "remotes::install_github('tercen/teRcen', ref='0.12.7')"
 RUN R -e "install.packages('reticulate')"
 
 RUN R -e "BiocManager::install('MetaCyto')"
 RUN R -e "BiocManager::install('openCyto')"
 RUN R -e "BiocManager::install('diffcyt')"
+RUN R -e "BiocManager::install('CATALYST')"
 
 RUN R -e "remotes::install_github('ghar1821/TrackSOM', ref = 'v0.1.0')"
 RUN R -e "remotes::install_github('RGLab/scamp', ref='v0.5.0')"
