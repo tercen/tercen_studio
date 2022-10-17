@@ -71,10 +71,10 @@ docker volume rm tercen_studio_tercen-studio-renv
 # Build
 
 ```bash
-git tag tercen-studio_3.5.3-1
+git tag tercen-studio-r35_3.5.3-1
 git push --tags
 
-git tag tercen-studio_4.0.4-1
+git tag tercen-studio-r40_4.0.4-1
 git push --tags
 
 git tag tercen-studio-flowsuite_3.15-1
