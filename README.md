@@ -10,10 +10,6 @@ git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
 ```
 
-Activate shared drives (Windows and Mac only)
-* right click on the running docker service and select "settings">"shared drives"
-* share the folder tercen_studio 
-
 Create tercen network
 
 ```shell
