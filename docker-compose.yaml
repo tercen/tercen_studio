@@ -80,6 +80,8 @@ services:
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
+#      - ~/.ssh:/home/rstudio/.ssh
+#      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
 volumes:
