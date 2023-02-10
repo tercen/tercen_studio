@@ -32,7 +32,7 @@ RUN apt-get install -y python3 python3-dev python3-pip python3-venv
 # needed for flowCut
 RUN apt-get install -y libgeos-dev libxt-dev
 # usefull for git
-RUN apt-get install openssh-client
+RUN apt-get install -y openssh-client
 
 USER rstudio
 
