@@ -28,8 +28,6 @@ RUN apt-get install -y python3 python3-dev python3-pip python3-venv
 # needed for flowCut
 RUN apt-get install -y libgeos-dev libxt-dev libtiff5-dev libzstd-dev libwebp-dev libglpk-dev
 
-USER rstudio
-
 RUN apt-get update -y && apt-get -y install \
     zip \
     unzip \
@@ -47,9 +45,10 @@ RUN apt-get update -y && apt-get -y install \
     apt-get install -y docker-ce-cli && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-USER root
+
 RUN groupadd docker
 RUN usermod -aG docker rstudio
+
 USER rstudio
 
 RUN mkdir -p /home/rstudio/projects
