@@ -30,6 +30,28 @@ RUN apt-get install -y libgeos-dev libxt-dev libtiff5-dev libzstd-dev libwebp-de
 
 USER rstudio
 
+RUN apt-get update -y && apt-get -y install \
+    zip \
+    unzip \
+    netcat-openbsd \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release  && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    echo \
+      "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+      $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+USER root
+RUN groupadd docker
+RUN usermod -aG docker rstudio
+USER rstudio
+
 RUN mkdir -p /home/rstudio/projects
 RUN mkdir -p /home/rstudio/.local/share/renv
 
