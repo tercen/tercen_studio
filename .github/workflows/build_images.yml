@@ -26,7 +26,7 @@ jobs:
       # run only if image is missing (1) 
       if: env.IMAGE_MISSING == 1
       run: |
-        docker build -build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -t ${{ env.IMAGE_NAME }} ./docker/${{ env.DIR_NAME }}
+        docker build --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -t ${{ env.IMAGE_NAME }} ./docker/${{ env.DIR_NAME }}
     - name: docker push
       if: env.IMAGE_MISSING == 1
       run: |
