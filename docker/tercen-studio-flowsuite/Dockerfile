@@ -1,5 +1,8 @@
 FROM bioconductor/bioconductor_docker:RELEASE_3_15
 
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 RUN apt-get update && apt-get install -y curl && curl --version
 
 ENV PATH="/home/rstudio/.cargo/bin:${PATH}"
