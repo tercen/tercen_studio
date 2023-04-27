@@ -14,6 +14,9 @@ RUN mkdir -p /home/rstudio/.R/ \
 RUN curl -v https://sh.rustup.rs --output rustup-init && chmod +x rustup-init && ./rustup-init -y -q
 
 USER root
+
+RUN adduser rstudio sudo
+
 # Global site-wide config
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
@@ -27,6 +30,24 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
      BioCworkflows="https://cran.tercen.com/api/v1/rlib/BioCworkflows-3.12" \
      ))' >> /usr/local/lib/R/etc/Rprofile.site
 
+# install docker cli
+RUN apt-get update -y &&  \
+    apt-get install -y ca-certificates gnupg && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo \
+          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&\
+    apt-get update -y && \
+    apt-get install -y docker-ce-cli && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    groupadd docker && \
+    usermod -aG docker rstudio
+
+# end docker
+
 RUN apt-get install -y python3 python3-dev python3-pip python3-venv
 
 # needed for flowCut
@@ -36,20 +57,14 @@ RUN apt-get install -y openssh-client
 
 USER rstudio
 
-RUN mkdir -p /home/rstudio/projects
-RUN mkdir -p /home/rstudio/.local/share/renv
+RUN mkdir -p /home/rstudio/projects && \
+    mkdir -p /home/rstudio/.local/share/renv && \
+    mkdir -p /home/rstudio/.ssh
 
 RUN R -e "install.packages(c('renv'))"
 RUN echo "install tercen 0.12.8"
 RUN R -e "install.packages('tercen')"
 RUN R -e "install.packages('tercenApi')"
-# RUN R -e "install.packages('reticulate')"
-# RETICULATE_MINICONDA_PATH
-# RUN R -e "reticulate::install_miniconda()"
-
-USER root
-
-RUN adduser rstudio sudo
 
 VOLUME /home/rstudio/projects
 VOLUME /home/rstudio/.local/share/renv

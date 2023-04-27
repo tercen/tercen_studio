@@ -70,7 +70,7 @@ docker volume rm tercen_studio_tercen-studio-renv
 git tag tercen-studio-r35_3.5.3-1
 git push --tags
 
-git tag tercen-studio-r40_4.0.4-3
+git tag tercen-studio-r40_4.0.4-4
 git push --tags
 
 #docker build -t tercen/tercen-studio-flowsuite docker/tercen-studio-flowsuite
