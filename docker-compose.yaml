@@ -29,6 +29,7 @@ services:
         aliases:
           - tercen
     image: tercen/tercen:0.10
+#    image: tercen/tercen:stage
     ports:
       - 5402:5400
     volumes:
@@ -42,6 +43,7 @@ services:
 
   sarno:
     image: tercen/sarno:0.1
+#    image: tercen/sarno:stage
     volumes:
       - tercen-data:/var/lib/tercen/data
       - tercen-run:/var/lib/tercen/run
@@ -68,18 +70,20 @@ services:
       tercen:
         aliases:
           - tercen_studio
-    image: tercen/tercen-studio-r40:4.0.4-3
-    # image: tercen/tercen-studio-flowsuite:3.15-1
+    image: tercen/tercen-studio-r40:4.0.4-6
+    # image: tercen/tercen-studio-flowsuite:3.15-6
     ports:
       - 8787:8787
     environment:
       - PASSWORD=tercen
     volumes:
+      - var-run:/var/run
       - /var/lib/tercen/share:/var/lib/tercen/share
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
+# uncomment to share host ssh and git config with tercen-studio
 #      - ~/.ssh:/home/rstudio/.ssh
 #      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
