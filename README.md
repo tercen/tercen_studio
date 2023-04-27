@@ -73,7 +73,8 @@ git push --tags
 git tag tercen-studio-r40_4.0.4-3
 git push --tags
 
-git tag tercen-studio-flowsuite_3.15-3
+#docker build -t tercen/tercen-studio-flowsuite docker/tercen-studio-flowsuite
+git tag tercen-studio-flowsuite_3.15-4
 git push --tags
 
 docker run -it --rm -v /home/alex/dev/tercen/tercen_studio/:/root/mydevfolder tercen/docker_operator bash
