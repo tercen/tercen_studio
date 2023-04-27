@@ -27,6 +27,22 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
      BioCworkflows="https://cran.tercen.com/api/v1/rlib/BioCworkflows-3.12" \
      ))' >> /usr/local/lib/R/etc/Rprofile.site
 
+# install docker cli
+RUN apt-get update -y &&  \
+    apt-get install -y ca-certificates gnupg && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo \
+          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&\
+    apt-get update -y && \
+    apt-get install -y docker-ce-cli && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    groupadd docker && \
+    usermod -aG docker rstudio \
+
 # needed for flowCut
 RUN apt-get install -y libgeos-dev libxt-dev cmake
 # usefull for git
