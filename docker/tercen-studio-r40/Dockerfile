@@ -64,5 +64,7 @@ RUN echo "install tercen 0.12.8"
 RUN R -e "install.packages('tercen')"
 RUN R -e "install.packages('tercenApi')"
 
+USER root
+
 VOLUME /home/rstudio/projects
 VOLUME /home/rstudio/.local/share/renv
