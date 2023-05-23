@@ -28,7 +28,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.10
+    image: tercen/tercen:0.11
 #    image: tercen/tercen:stage
     ports:
       - 5402:5400
@@ -37,16 +37,14 @@ services:
       - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
       - var-run:/var/run
-      - tercen-run:/var/lib/tercen/run
       - tmp:/tmp
     restart: always
 
   sarno:
-    image: tercen/sarno:0.1
+    image: tercen/sarno:0.2
 #    image: tercen/sarno:stage
     volumes:
       - tercen-data:/var/lib/tercen/data
-      - tercen-run:/var/lib/tercen/run
       - tmp:/tmp
     restart: always
 
@@ -95,5 +93,4 @@ volumes:
   tercen-studio-renv:
   var-lib-docker:
   var-run:
-  tercen-run:
   tmp:
