@@ -41,6 +41,11 @@ services:
     restart: always
 
   sarno:
+    networks:
+      tercen:
+        ipv4_address: 172.42.0.42
+        aliases:
+          - sarno
     image: tercen/sarno:0.2
 #    image: tercen/sarno:stage
     volumes:
