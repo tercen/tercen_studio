@@ -12,7 +12,7 @@ services:
     restart: always
 
   tercen:
-    image: tercen/tercen:dev
+    image: tercen/tercen:0.11
 #    image: tercen/tercen:stage
     ports:
       - 5402:5400
