@@ -9,71 +9,12 @@ networks:
 
 services:
 
-  couchdb:
-    networks:
-      tercen:
-        aliases:
-          - couchdb
-    image: ibmcom/couchdb3:3.1.1
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
-    volumes:
-      - couchdb3-data:/opt/couchdb/data
-    restart: always
-
-  tercen:
-    networks:
-      tercen:
-        ipv4_address: 172.42.0.42
-        aliases:
-          - tercen
-    image: tercen/tercen:0.11
-#    image: tercen/tercen:stage
-    ports:
-      - 5402:5400
-    volumes:
-      - /var/lib/tercen/external:/var/lib/tercen/external
-      - tercen-data:/var/lib/tercen/data
-      - ./config/tercen:/etc/tercen
-      - var-run:/var/run
-      - tmp:/tmp
-    restart: always
-
-  sarno:
-    networks:
-      tercen:
-        aliases:
-          - sarno
-    image: tercen/sarno:0.2
-#    image: tercen/sarno:stage
-    volumes:
-      - tercen-data:/var/lib/tercen/data
-      - tmp:/tmp
-    restart: always
-
-  runtime-docker:
-    privileged: true
-    image: docker:20.10.9-dind-alpine3.14
-    networks:
-      tercen:
-        aliases:
-          - runtime-docker
-    volumes:
-      - var-run:/var/run
-      - var-lib-docker:/var/lib/docker
-      - tercen-data:/var/lib/tercen/data
-      - /var/lib/tercen/external:/var/lib/tercen/external
-      - tmp:/tmp
-    restart: always
-
   tercen_studio:
     networks:
       tercen:
         aliases:
           - tercen_studio
     image: tercen/tercen-studio-r40:4.0.4-7
-    # image: tercen/tercen-studio-flowsuite:3.15-6
     ports:
       - 8787:8787
     environment:
