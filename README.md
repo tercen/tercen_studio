@@ -70,10 +70,11 @@ docker volume rm tercen_studio_tercen-studio-renv
 git tag tercen-studio-r35_3.5.3-1
 git push --tags
 
-git tag tercen-studio-r40_4.0.4-1
+git tag tercen-studio-r40_4.0.4-7
 git push --tags
 
-git tag tercen-studio-flowsuite_3.15-1
+#docker build -t tercen/tercen-studio-flowsuite docker/tercen-studio-flowsuite
+git tag tercen-studio-flowsuite_3.15-6
 git push --tags
 
 docker run -it --rm -v /home/alex/dev/tercen/tercen_studio/:/root/mydevfolder tercen/docker_operator bash
