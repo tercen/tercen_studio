@@ -2,7 +2,8 @@ FROM lscr.io/linuxserver/code-server:4.14.1
 
 USER root 
 
-RUN apt-get update && apt-get install -y git \
+RUN apt-get update && apt-get install -y build-essential \
+	git \
 	jq \
 	libbz2-dev \
 	libffi-dev \
