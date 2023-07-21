@@ -58,8 +58,8 @@ services:
       tercen:
         aliases:
           - tercen_studio
-    image: tercen/tercen-studio-r40:4.0.4-1
-    # image: tercen/tercen-studio-flowsuite:3.15-1
+    # image: tercen/tercen-studio-r40:4.0.4-1
+    image: tercen/tercen-studio-flowsuite:3.15-1
     ports:
       - 8787:8787
     environment:
@@ -71,6 +71,24 @@ services:
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
       - ./config/tercen-studio/examples:/home/rstudio/projects/examples
     restart: always
+
+  code-server:
+    image: tercen/tercen-code-py39:3.9.0-1
+    container_name: code-server
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - PASSWORD=tercen
+      - SUDO_PASSWORD=tercen
+    volumes:
+      - /opt/codeserver/config:/config
+    networks:
+      tercen:
+        aliases:
+          - code-server
+    ports:
+      - 8443:8443
+    restart: unless-stopped
 
 volumes:
   couchdb3-data:
