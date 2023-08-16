@@ -18,10 +18,7 @@ RUN apt-get update && apt-get install -y build-essential \
 	libncurses5-dev \
 	libncursesw5-dev \
 	xz-utils \
-	tk-dev \
-	python3-openssl \
-	python3-pip \
- 	python3-venv
+	tk-dev
 
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 RUN ~/.pyenv/bin/pyenv install 3.9.0
