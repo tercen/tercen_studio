@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y build-essential
 	tk-dev
 
 RUN wget https://www.python.org/ftp/python/3.9.17/Python-3.9.17.tar.xz && \
+	tar -xf Python-3.9.17.tar.xz && \
 	cd Python-3.9.17 && \
 	./configure && \
 	make && \
