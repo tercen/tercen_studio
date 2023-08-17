@@ -1,0 +1,12 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tercen-service-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: tercen
+  ports:
+    - port: 80
+      targetPort: 5400

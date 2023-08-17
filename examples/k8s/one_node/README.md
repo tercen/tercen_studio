@@ -1,6 +1,6 @@
 # Introduction
 
-This document describes the installation and usage of [tercen](https://tercen.com/) running on 2 nodes
+This document describes the installation and usage of [tercen](https://tercen.com/) running on 1 node
 
 Requirements: k8s cluster with LoadBalancer service running
 
@@ -18,7 +18,7 @@ Tercen is composed of a number of components.
 \
 \
 
-![tercen-cluster](../../doc/tercen-cluster.png)
+![tercen-cluster](../../../../doc/tercen-cluster.png)
 
 \
 \
@@ -77,7 +77,7 @@ kubectl create -f sc.yaml
 kubectl get nodes
 
 kubectl label nodes ip-192-168-6-126.eu-central-1.compute.internal app=tercen
-kubectl label nodes ip-192-168-61-38.eu-central-1.compute.internal app=tercen-worker
+
 ```
 
 # Install tercen
@@ -109,18 +109,16 @@ kubectl get svc
 
 ## Tercen config
 
-Set tercen external ip in config files and the following properties:
+Set tercen external domain name in config file and the following properties:
 
 - tercen.admin.password
 - tercen.secret
 - tercen.auth.cookie.domain
 - tercen.test.password
-- tercen.public.uri
-- tercen.public.client.uri
+- tercen.github.token
 
 ```shell
 kubectl create configmap tercen-config --from-file=config.yaml=examples/k8s/tercen-config.txt -o yaml --dry-run=client | kubectl apply -f -
-kubectl create configmap tercen-worker-config --from-file=config.yaml=examples/k8s/tercen-worker-config.txt -o yaml --dry-run=client | kubectl apply -f -
 ```
 
 ## SAML config
@@ -163,8 +161,7 @@ and
 ## Tercen services
 
 ```shell
-kubectl apply -f examples/k8s/tercen.yaml
-kubectl apply -f examples/k8s/tercen-worker.yaml
+kubectl apply -f examples/k8s/one_node/tercen.yaml
 
 TERCEN_POD=$(kubectl get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.name}')
 
@@ -172,16 +169,15 @@ kubectl logs $TERCEN_POD tercen
 
 # check if tercen is running using k8s port forward
 kubectl port-forward $TERCEN_POD 6400:5400
-# http://localhost:6400/
+# http://127.0.0.1:6400/
 ```
 
 
 ## Tercen logs
 
-To change tercen log level modify the config files :
+To change tercen log level modify the config file :
 
 - tercen-config.txt
-- tercen-worker-config.txt
 
 ```yaml
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
@@ -192,7 +188,6 @@ Then apply the configmap.
  
 ```shell
 kubectl create configmap tercen-config --from-file=config.yaml=examples/k8s/tercen-config.txt -o yaml --dry-run=client | kubectl apply -f -
-kubectl create configmap tercen-worker-config --from-file=config.yaml=examples/k8s/tercen-worker-config.txt -o yaml --dry-run=client | kubectl apply -f -
 ```
 
 ```text
@@ -203,8 +198,6 @@ And finally access logs from tercen pods.
 
 ```shell
 TERCEN_POD=$(kubectl get pod -l "app=tercen" -o jsonpath='{.items[0].metadata.name}')
-TERCEN_WORKER_POD=$(kubectl get pod -l "app=tercen-worker" -o jsonpath='{.items[0].metadata.name}')
 
 kubectl logs --tail=2000 -f $TERCEN_POD tercen
-kubectl logs --tail=2000 -f $TERCEN_WORKER_POD tercen-worker
 ```

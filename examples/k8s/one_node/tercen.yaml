@@ -1,0 +1,114 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tercen-service
+spec:
+  type: NodePort
+  selector:
+    app: tercen
+  ports:
+    - port: 5400
+      nodePort: 30054
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tercen-deployment
+  namespace: default
+  labels:
+    app: tercen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tercen
+  template:
+    metadata:
+      labels:
+        app: tercen
+    spec:
+      containers:
+        - name: tercen-pod
+          image: tercen/tercen:0.11
+          imagePullPolicy: Always
+#          resources:
+#            requests:
+#              cpu: "1"
+          env:
+            - name: tercen.worker.runtime.ip
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 5400
+              name: tercen
+          volumeMounts:
+            - name: tercen-config
+              mountPath: /etc/tercen
+            - name: tercen-data
+              mountPath: /var/lib/tercen/data
+              readOnly: false
+            - name: tercen-tmp
+              mountPath: /tmp
+              readOnly: false
+            - name: var-run
+              mountPath: /var/run
+        - name: sarno-prod
+          image: tercen/sarno:0.2
+          imagePullPolicy: Always
+#          resources:
+#            requests:
+#              cpu: "0.2"
+          volumeMounts:
+            - name: tercen-data
+              mountPath: /var/lib/tercen/data
+              readOnly: false
+            - name: tercen-tmp
+              mountPath: /tmp
+              readOnly: false
+        - name: runtime-docker
+          image: docker:20.10.9-dind-alpine3.14
+          imagePullPolicy: Always
+#          resources:
+#            requests:
+#              cpu: "0.1"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: var-run
+              mountPath: /var/run
+              readOnly: false
+            - name: var-lib-docker
+              mountPath: /var/lib/docker
+              readOnly: false
+            - name: tercen-tmp
+              mountPath: /tmp
+            - name: tercen-operator
+              mountPath: /var/lib/tercen/data/operator/
+              readOnly: false
+            - name: tercen-renv
+              mountPath: /var/lib/tercen/data/renv/
+              readOnly: false
+      volumes:
+        - name: tercen-config
+          configMap:
+            name: tercen-config
+        - name: var-run
+          emptyDir: {}
+        - name: tercen-tmp
+          emptyDir: {}
+        - name: var-lib-docker
+#          persistentVolumeClaim:
+#            claimName: tercen-var-lib-docker-pvc
+          hostPath:
+            path: /tercen/runtime/var/lib/docker
+        - name: tercen-data
+          persistentVolumeClaim:
+            claimName: tercen-data-pvc
+        - name: tercen-renv
+          persistentVolumeClaim:
+            claimName: tercen-renv-pvc
+        - name: tercen-operator
+          persistentVolumeClaim:
+            claimName: tercen-operator-pvc
+      restartPolicy: Always

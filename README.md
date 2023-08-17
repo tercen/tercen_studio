@@ -100,4 +100,6 @@ Then restart tercen
 docker-compose down        
 # start tercen_studio
 docker-compose up -d
+docker compose up -d
+docker compose --version
 ```
