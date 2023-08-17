@@ -18,7 +18,7 @@ Tercen is composed of a number of components.
 \
 \
 
-![tercen-cluster](../../../../doc/tercen-cluster.png)
+![tercen-cluster](../../../doc/tercen-cluster.png)
 
 \
 \
