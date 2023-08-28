@@ -14,7 +14,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tercen-deployment
-  namespace: default
   labels:
     app: tercen
 spec:
@@ -27,38 +26,73 @@ spec:
       labels:
         app: tercen
     spec:
+      restartPolicy: Always
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#              - matchExpressions:
+#                  - key: app
+#                    operator: In
+#                    values:
+#                      - tercen-worker
+      volumes:
+        - name: tercen-config
+          configMap:
+            name: tercen-config
+#        - name: tercen-saml-cert
+#          configMap:
+#            name: tercen-saml-cert
+        - name: tercen-tmp
+          emptyDir: {}
+        - name: var-run
+          emptyDir: {}
+        - name: tercen-data
+          persistentVolumeClaim:
+            claimName: tercen-data-pvc
+        - name: tercen-renv
+          persistentVolumeClaim:
+            claimName: tercen-renv-pvc
+        - name: tercen-operator
+          persistentVolumeClaim:
+            claimName: tercen-operator-pvc
+        - name: var-lib-docker
+          persistentVolumeClaim:
+            claimName: tercen-var-lib-docker-pvc
       containers:
-        - name: tercen-pod
+        - name: tercen
           image: tercen/tercen:0.11
           imagePullPolicy: Always
-#          resources:
-#            requests:
-#              cpu: "1"
-          env:
-            - name: tercen.worker.runtime.ip
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
           ports:
             - containerPort: 5400
               name: tercen
           volumeMounts:
-            - name: tercen-config
-              mountPath: /etc/tercen
-            - name: tercen-data
-              mountPath: /var/lib/tercen/data
-              readOnly: false
             - name: tercen-tmp
               mountPath: /tmp
               readOnly: false
+            - name: tercen-config
+              mountPath: /etc/tercen
+#            - name: tercen-saml-cert
+#              mountPath: /etc/tercen/saml
+            - name: tercen-data
+              mountPath: /var/lib/tercen/data
+              readOnly: false
+            - name: tercen-operator
+              mountPath: /var/lib/tercen/data/operator
+              readOnly: false
+            - name: tercen-renv
+              mountPath: /var/lib/tercen/data/renv/
+              readOnly: false
             - name: var-run
-              mountPath: /var/run
-        - name: sarno-prod
-          image: tercen/sarno:0.2
+              mountPath: /var/run/
+        - name: sarno
+          image: tercen/sarno:0.2.4
           imagePullPolicy: Always
-#          resources:
-#            requests:
-#              cpu: "0.2"
+          env:
+            - name: k8s.force.reload
+              value: "0"
+            - name: RUST_BACKTRACE
+              value: "1"
           volumeMounts:
             - name: tercen-data
               mountPath: /var/lib/tercen/data
@@ -69,9 +103,6 @@ spec:
         - name: runtime-docker
           image: docker:20.10.9-dind-alpine3.14
           imagePullPolicy: Always
-#          resources:
-#            requests:
-#              cpu: "0.1"
           securityContext:
             privileged: true
           volumeMounts:
@@ -89,26 +120,4 @@ spec:
             - name: tercen-renv
               mountPath: /var/lib/tercen/data/renv/
               readOnly: false
-      volumes:
-        - name: tercen-config
-          configMap:
-            name: tercen-config
-        - name: var-run
-          emptyDir: {}
-        - name: tercen-tmp
-          emptyDir: {}
-        - name: var-lib-docker
-#          persistentVolumeClaim:
-#            claimName: tercen-var-lib-docker-pvc
-          hostPath:
-            path: /tercen/runtime/var/lib/docker
-        - name: tercen-data
-          persistentVolumeClaim:
-            claimName: tercen-data-pvc
-        - name: tercen-renv
-          persistentVolumeClaim:
-            claimName: tercen-renv-pvc
-        - name: tercen-operator
-          persistentVolumeClaim:
-            claimName: tercen-operator-pvc
-      restartPolicy: Always
+

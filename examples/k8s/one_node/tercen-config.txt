@@ -3,48 +3,58 @@ configs:
     hosts:
       - 127.0.0.1
       - tercen-service
-      - aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+      - tercen.mycompany.com
     config:
-      tercen.auth.cookie.domain: aa0bc28777c634653bff4147d0f023de-1139600791.eu-central-1.elb.amazonaws.com
+      tercen.auth.cookie.domain: tercen.mycompany.com
+      client:
+        name: tercen
+        signup: 'true'
+        show.worker.admin: 'true'
 
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
-tercen.log.level: '0'
-tercen.secret: "4ab70b11-d7bd-9998-958f-01b7ac4e9555"
+tercen.log.level: '700'
+tercen.secret: "0b37d2b6-9906-4189-8991-18a755aee8a2"
 
+
+#SAML config
 #tercen.auth.method: 'saml'
-#tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
-#tercen.saml.idp.issuer: https://sts.windows.net/5b5c94c6-14cf-42da-85bc-4e08722b253b/
-#tercen.saml.audience: https://my.tercen.com/_service/sso/auth/saml
-#tercen.saml.binding.url: https://login.microsoftonline.com/5b5c94c6-14cf-42da-85bc-4e08722b253b/saml2
+#tercen.saml.request.issuer: https://tercen.mycompany.com/_service/sso/auth/saml
+#tercen.saml.idp.issuer: https://sts.windows.net/0b37d2b6-9906-4189-8991-18a755aee8a2/
+#tercen.saml.audience: https://tercen.mycompany.com/_service/sso/auth/saml
+#tercen.saml.binding.url: https://login.microsoftonline.com/0b37d2b6-9906-4189-8991-18a755aee8a2/saml2
 #tercen.saml.certificate.file: /etc/tercen/saml/cert.pem
+
 
 tercen.allow.untrusted.git: 'false'
 tercen.allow.untrusted.docker: 'false'
+tercen.trusted.git:
+  - 'https://github.com/tercen/'
+  - 'https://github.com/mycompany/'
 
-#tercen.trusted.git:
-#  - 'https://github.com/tercen/'
+tercen.test.password: xxxxxxxxxxxxxx
+tercen.admin.password: xxxxxxxxxxxxxx
+tercen.worker.password: xxxxxxxxxxxxxx
 
-tercen.test.password: test
-tercen.admin.password: admin
-tercen.worker.password: admin
+tercen.github.token: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#tercen.github.token: xxx
-#tercen.auth.client.id.google: 'xxxx.apps.googleusercontent.com'
-#tercen.auth.client.secret.google: 'xxxxx'
 
-tercen.user.sign.up: 'false'
-
+#tercen.user.sign.up: 'false'
+tercen.public.uri: https://tercen.mycompany.com
+tercen.public.client.uri: http://tercen-service:5400
 tercen.client.uri: http://tercen-service:5400
-tercen.worker.ip: tercen-service
 
 #tercen.smtp.username: info@xxx.com
 #tercen.smtp.password: xxxx
 
 tercen.couchdb.address: couchdb
 tercen.couchdb.user: admin
-tercen.couchdb.password: admin
+tercen.couchdb.password: xxxxxxxxxxxxxxxx
 
 #tercen.worker.isolates: "0"
-tercen.worker.proc.override: 'true'
-tercen.worker.proc.override.isolates.cpu.ratio: '1'
 tercen.ws.compression: "on"
+tercen.worker.proc.override: 'true'
+tercen.worker.proc.override.isolates.cpu.ratio: '4'
+
+tercen.roles:
+  someone@mycompany.com:
+    - admin
