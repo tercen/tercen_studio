@@ -91,7 +91,7 @@ services:
     restart: always
 
   code-server:
-    image: tercen/tercen-code-py39:3.9.0-5
+    image: tercen/tercen-code-py39:3.9.17-2
     container_name: code-server
     environment:
       - PUID=1001
@@ -99,7 +99,7 @@ services:
       - PASSWORD=tercen
       - SUDO_PASSWORD=tercen
     volumes:
-      - /opt/codeserver/config:/config
+      - code-server-data:/config
     networks:
       tercen:
         aliases:
@@ -110,6 +110,7 @@ services:
 
 volumes:
   couchdb3-data:
+  code-server-data:
   tercen-data:
   tercen-studio-data:
   tercen-studio-renv:
