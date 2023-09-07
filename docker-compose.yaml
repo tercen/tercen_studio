@@ -31,7 +31,7 @@ services:
     image: tercen/tercen:0.11
 #    image: tercen/tercen:stage
     ports:
-      - 5402:5400
+      - "5402:5400"
     volumes:
       - /var/lib/tercen/external:/var/lib/tercen/external
       - tercen-data:/var/lib/tercen/data
@@ -55,12 +55,12 @@ services:
   runtime-docker:
     privileged: true
     image: docker:24.0.6-dind-alpine3.18
-#    image: docker:20.10.9-dind-alpine3.14
     networks:
       tercen:
         aliases:
           - runtime-docker
     volumes:
+#      - /etc/ssl/certs:/etc/ssl/certs:ro
       - var-run:/var/run
       - var-lib-docker:/var/lib/docker
       - tercen-data:/var/lib/tercen/data
@@ -76,7 +76,7 @@ services:
     image: tercen/tercen-studio-r40:4.0.4-7
     # image: tercen/tercen-studio-flowsuite:3.15-6
     ports:
-      - 8787:8787
+      - "8787:8787"
     environment:
       - PASSWORD=tercen
     volumes:
@@ -106,7 +106,7 @@ services:
         aliases:
           - code-server
     ports:
-      - 8443:8443
+      - "8443:8443"
     restart: unless-stopped
 
 volumes:
