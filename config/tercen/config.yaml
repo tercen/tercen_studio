@@ -32,6 +32,9 @@ tercen.external.storage.enabled: 'true'
 #tercen.external.storage.read.path: '/var/lib/tercen/external/read'
 #tercen.external.storage.write.path: '/var/lib/tercen/external/write'
 
+#tercen.auth.client.id.google: 'xxxxx.apps.googleusercontent.com'
+#tercen.auth.client.secret.google: 'xxxxx'
+
 #tercen.auth.method: 'saml'
 #tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
 #tercen.saml.idp.issuer: https://sts.windows.net/5b5c94c6-14cf-42da-85bc-4e08722b253b/
