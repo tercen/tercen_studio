@@ -23,6 +23,15 @@ tercen.secret: "3ab70b11-d7bd-4097-958f-01b7ac4e955f"
 
 To use Google authentication the following properties need to be configured in tercen config file.
 
+```yaml
+# Google auth settings
+tercen.auth.client.id.google: 'xxxxx.apps.googleusercontent.com'
+tercen.auth.client.secret.google: 'xxxxx'
+```
+
+## Google cloud console 
+
+Credential management
 - "APIs and services"
 - Credentials
 
@@ -42,11 +51,7 @@ Authorised redirect URIs
 Once created copy "Client ID" and "Client secret" in tercen config file.
 
 
-```yaml
-# Google auth settings
-tercen.auth.client.id.google: 'xxxxx.apps.googleusercontent.com'
-tercen.auth.client.secret.google: 'xxxxx'
-```
+
 
 
 # SAML
