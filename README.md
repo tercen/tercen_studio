@@ -97,9 +97,8 @@ Then restart tercen
 
 ```bash
 # stop tercen_studio
-docker-compose down        
+docker compose down        
 # start tercen_studio
-docker-compose up -d
 docker compose up -d
 docker compose --version
 ```

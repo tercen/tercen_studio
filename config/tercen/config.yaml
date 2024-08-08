@@ -32,6 +32,7 @@ tercen.external.storage.enabled: 'true'
 #tercen.external.storage.read.path: '/var/lib/tercen/external/read'
 #tercen.external.storage.write.path: '/var/lib/tercen/external/write'
 
+# Google auth settings
 #tercen.auth.client.id.google: 'xxxxx.apps.googleusercontent.com'
 #tercen.auth.client.secret.google: 'xxxxx'
 

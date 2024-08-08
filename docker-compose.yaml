@@ -8,6 +8,16 @@ networks:
         - subnet: 172.42.0.0/16
 
 services:
+#  reverse-proxy:
+#    networks:
+#      tercen:
+#        aliases:
+#          - reverse-proxy
+#    image: haproxy:1.7
+#    volumes:
+#      - ./config/tercen/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+#    ports:
+#      - 5410:80
 
   couchdb:
     networks:
@@ -28,8 +38,8 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.11
-#    image: tercen/tercen:stage
+#    image: tercen/tercen:0.11
+    image: tercen/tercen:stage
     ports:
       - "5402:5400"
     volumes:
@@ -45,8 +55,8 @@ services:
       tercen:
         aliases:
           - sarno
-    image: tercen/sarno:0.2
-#    image: tercen/sarno:stage
+#    image: tercen/sarno:0.2
+    image: tercen/sarno:stage
     volumes:
       - tercen-data:/var/lib/tercen/data
       - tmp:/tmp
@@ -91,23 +101,23 @@ services:
 #      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
-  code-server:
-    image: tercen/tercen-code-py39:3.9.17-2
-    container_name: code-server
-    environment:
-      - PUID=1001
-      - PGID=1001
-      - PASSWORD=tercen
-      - SUDO_PASSWORD=tercen
-    volumes:
-      - code-server-data:/config
-    networks:
-      tercen:
-        aliases:
-          - code-server
-    ports:
-      - "8443:8443"
-    restart: unless-stopped
+#  code-server:
+#    image: tercen/tercen-code-py39:3.9.17-2
+#    container_name: code-server
+#    environment:
+#      - PUID=1001
+#      - PGID=1001
+#      - PASSWORD=tercen
+#      - SUDO_PASSWORD=tercen
+#    volumes:
+#      - code-server-data:/config
+#    networks:
+#      tercen:
+#        aliases:
+#          - code-server
+#    ports:
+#      - "8443:8443"
+#    restart: unless-stopped
 
 volumes:
   couchdb3-data:
