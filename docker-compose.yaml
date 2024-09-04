@@ -1,4 +1,4 @@
-version: "3.9"
+#version: "3.9"
 
 networks:
   tercen:
@@ -28,7 +28,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.15.5
+    image: tercen/tercen:0.15.6
 #    image: tercen/tercen:stage
     ports:
       - "5402:5400"
@@ -38,6 +38,7 @@ services:
       - ./config/tercen:/etc/tercen
       - var-run:/var/run
       - tmp:/tmp
+#      - ~/.docker/config.json:/root/.docker/config.json:ro
     restart: always
 
   sarno:
