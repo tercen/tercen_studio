@@ -1,0 +1,89 @@
+networks:
+  tercen_proxy:
+  tercen_internal:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.43.0.0/16
+
+services:
+  squid:
+    networks:
+      tercen_proxy:
+      tercen_internal:
+        ipv4_address: 172.43.0.142
+    image: sameersbn/squid:3.5.27-2
+    restart: always
+    container_name: squid
+    hostname: squid
+    volumes:
+      - ./etc/squid/squid.conf:/etc/squid/squid.conf
+    ports:
+      - "3128:3128"
+
+  reverse-proxy:
+    networks:
+      tercen_proxy:
+      tercen_internal:
+    image: haproxy:1.7
+    volumes:
+      - ./config/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - 5404:80
+
+  couchdb:
+    networks:
+      tercen_internal:
+    image: ibmcom/couchdb3:3.1.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    volumes:
+      - couchdb3-data:/opt/couchdb/data
+    restart: always
+
+  tercen:
+    networks:
+      tercen_internal:
+        ipv4_address: 172.43.0.42
+    image: tercen/tercen:0.15.10
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - ./config/tercen:/etc/tercen
+      - var-run:/var/run
+      - tmp:/tmp
+    restart: always
+
+  sarno:
+    networks:
+      tercen_internal:
+    image: tercen/sarno:stage
+    volumes:
+      - tercen-data:/var/lib/tercen/data
+      - tmp:/tmp
+    restart: always
+
+  runtime-docker:
+    privileged: true
+    image: docker:24.0.6-dind-alpine3.18
+    networks:
+      tercen_internal:
+    environment:
+      - https_proxy=http://172.43.0.142:3128
+    volumes:
+      - var-run:/var/run
+      - var-lib-docker:/var/lib/docker
+      - tercen-data:/var/lib/tercen/data
+      - tmp:/tmp
+    restart: always
+
+volumes:
+  couchdb3-data:
+  code-server-data:
+  tercen-data:
+  tercen-studio-data:
+  tercen-studio-renv:
+  var-lib-docker:
+  var-run:
+  tmp:

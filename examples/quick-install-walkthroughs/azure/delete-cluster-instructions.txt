@@ -1,9 +1,0 @@
-kubectl delete -f tercen-loadbalancer.yaml
-kubectl delete -f tercen-deployment.yaml
-kubectl delete -f tercen-pv-claim.yaml
-kubectl delete -f tercen-service.yaml
-kubectl delete -f couchdb.yaml
-kubectl delete -f couchdb-pv-claim.yaml
-kubectl delete -f azure-file-sc.yaml
-
-az group delete --name myResourceGroup --yes --no-wait

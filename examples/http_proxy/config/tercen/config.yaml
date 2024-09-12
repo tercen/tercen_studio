@@ -1,7 +1,7 @@
 configs:
   - domain: ''
     hosts:
-      - 172.42.0.42
+      - 172.43.0.42
       - 127.0.0.1
       - tercen
     config:
@@ -17,12 +17,14 @@ tercen.couchdb.user: admin
 tercen.couchdb.password: admin
 
 tercen.sarno.ip: 'sarno'
+tercen.github.token: ghp_xxxxx
+tercen.https.proxy: http://172.43.0.142:3128
 
 # upgrade from 0.9.0 to 0.10.0
 # run.sarno.table.migration: 'true'
 
-tercen.client.uri: http://172.42.0.42:5400
-tercen.worker.ip: 172.42.0.42
+tercen.client.uri: http://172.43.0.42:5400
+tercen.worker.ip: 172.43.0.42
 tercen.worker.runtime.ip: runtime-docker
 
 #tercen.mount.ssl.root.cert: 'true'
