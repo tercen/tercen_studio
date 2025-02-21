@@ -1,0 +1,7 @@
+table_dir_original = '/var/lib/tercen/data/sarno/'
+table_dir = '/var/lib/tercen/data/sarno'
+file_dir = '/home/alex/dev/tercen/data/upload/'
+grpc_host = '172.17.0.1'
+grpc_port = '50051'
+grpc_username = 'admin'
+grpc_password = 'admin'

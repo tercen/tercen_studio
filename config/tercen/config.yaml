@@ -18,6 +18,13 @@ tercen.couchdb.password: admin
 
 tercen.sarno.ip: 'sarno'
 
+# upgrade from 0.15 to 0.16
+## run the following to track the upgrade process
+## docker compose logs -f tercen | grep UpgradeProcess16
+#tercen.update.task.size: 'true'
+#tercen.force.upgrade: 'true'
+#migration.buffer.size: '1000'
+
 # upgrade from 0.9.0 to 0.10.0
 # run.sarno.table.migration: 'true'
 
