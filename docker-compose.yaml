@@ -48,8 +48,6 @@ services:
           - sarno
     image: tercen/sarno:0.4.0
 #    image: tercen/sarno:stage
-    environment:
-      - TERCEN_PASSWORD=admin
     volumes:
       - tercen-data:/var/lib/tercen/data
       - tmp:/tmp
