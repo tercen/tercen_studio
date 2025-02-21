@@ -102,3 +102,55 @@ docker compose down
 docker compose up -d
 docker compose --version
 ```
+
+# upgrade from 0.15 to 0.16
+
+Stop tercen.
+
+```shell
+docker compose down
+```
+
+Update git repository
+
+```shell
+git pull
+```
+
+Load new tercen docker images.
+
+```shell
+docker compose pull
+```
+
+Uncomment the following settings in the tercen config file.
+
+config/tercen/config.yaml
+
+```shell
+tercen.update.task.size: 'true'
+tercen.force.upgrade: 'true'
+migration.buffer.size: '1000'
+```
+
+Restart tercen.
+
+```shell
+docker compose up -d
+```
+
+Run the following to track the upgrade process
+
+```shell
+docker compose logs -f tercen | grep UpgradeProcess16
+# check for the following message
+# tercen_studio-tercen-1 | Main : 2025-02-21 12:19:36.850358 : 7 : CONFIG : UpgradeProcess16 : do_upgrade done
+```
+
+Once the migration process is completed, following settings must be commented.
+
+```shell
+#tercen.update.task.size: 'true'
+#tercen.force.upgrade: 'true'
+#migration.buffer.size: '1000'
+```
