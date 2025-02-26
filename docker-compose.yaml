@@ -28,7 +28,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.16.4
+    image: tercen/tercen:0.16.6
 #    image: tercen/tercen:stage
     ports:
       - "5402:5400"
@@ -46,7 +46,7 @@ services:
       tercen:
         aliases:
           - sarno
-    image: tercen/sarno:0.4.0
+    image: tercen/sarno:0.4.2
 #    image: tercen/sarno:stage
     volumes:
       - tercen-data:/var/lib/tercen/data
