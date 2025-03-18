@@ -32,6 +32,7 @@ services:
 #    image: tercen/tercen:stage
     ports:
       - "5402:5400"
+#      - "50051:50051"
     volumes:
       - /var/lib/tercen/external:/var/lib/tercen/external
       - tercen-data:/var/lib/tercen/data
