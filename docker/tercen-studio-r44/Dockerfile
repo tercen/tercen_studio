@@ -46,7 +46,7 @@ RUN mkdir -p /home/rstudio/projects
 RUN mkdir -p /home/rstudio/.local/share/renv
 
 RUN R -e "install.packages(c('renv', 'remotes'))"
-RUN R -e "remotes::install_github('tercen/teRcen', ref = '0.13.7')"
+RUN R -e "remotes::install_github('tercen/teRcen', ref = '0.13.11', upgrade = FALSE, force = TRUE, dependencies = c('Depends', 'Imports', 'Remotes'))"
 
 USER root
 
