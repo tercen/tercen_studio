@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:4.2.2
+FROM rocker/tidyverse:4.4.3
 
 RUN apt-get update && apt-get install -y curl && curl --version
 
@@ -18,14 +18,7 @@ USER root
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
-    echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site && \
-    echo 'options(repos=c(TERCEN="https://cran.tercen.com/api/v1/rlib/tercen",\
-     CRAN="https://cran.tercen.com/api/v1/rlib/CRAN", \
-     BioCsoft="https://cran.tercen.com/api/v1/rlib/BioCsoft-3.12", \
-     BioCann="https://cran.tercen.com/api/v1/rlib/BioCann-3.12", \
-     BioCexp="https://cran.tercen.com/api/v1/rlib/BioCexp-3.12", \
-     BioCworkflows="https://cran.tercen.com/api/v1/rlib/BioCworkflows-3.12" \
-     ))' >> /usr/local/lib/R/etc/Rprofile.site
+    echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site
 
 # install docker cli
 RUN apt-get update -y &&  \
@@ -53,12 +46,8 @@ USER rstudio
 RUN mkdir -p /home/rstudio/projects
 RUN mkdir -p /home/rstudio/.local/share/renv
 
-RUN R -e "install.packages(c('renv'))"
-RUN echo "Installing tercen 0.13.0"
-RUN R -e "install.packages('tercen')"
-RUN R -e "install.packages('tercenApi')"
-RUN echo "Installing tercen 0.1.0"
-RUN R -e "install.packages('tim')"
+RUN R -e "install.packages(c('renv', 'remotes'))"
+RUN R -e "remotes::install_github('tercen/teRcen', ref = '0.13.7')"
 
 USER root
 
