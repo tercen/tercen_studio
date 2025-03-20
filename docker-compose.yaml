@@ -58,6 +58,14 @@ services:
   runtime-docker:
     privileged: true
     image: docker:24.0.6-dind-alpine3.18
+#    image: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [ gpu ]
     networks:
       tercen:
         aliases:
@@ -94,8 +102,11 @@ services:
 #      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
+
+# install docker client
+# sudo /home/abc/setup-docker.sh
   code-server:
-    image: tercen/tercen-code-py39:3.9.17-2
+    image: tercen/tercen-code-py39:3.9.17-3
     container_name: code-server
     environment:
       - PUID=1001
@@ -104,7 +115,7 @@ services:
       - SUDO_PASSWORD=tercen
     volumes:
       - code-server-data:/config
-#      - var-run:/var/run
+      - var-run:/var/run
     networks:
       tercen:
         aliases:
