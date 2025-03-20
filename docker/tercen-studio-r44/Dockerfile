@@ -20,26 +20,25 @@ RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/loc
     echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site
 
-# install docker cli
+# Install Docker CLI
 RUN apt-get update -y &&  \
     apt-get install -y ca-certificates gnupg && \
     install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     chmod a+r /etc/apt/keyrings/docker.gpg && \
-    echo \
-          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&\
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+    | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update -y && \
     apt-get install -y docker-ce-cli && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    groupadd docker && \
-    usermod -aG docker rstudio \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# needed for flowCut
-RUN apt-get install -y libgeos-dev libxt-dev cmake
-# usefull for git
-RUN apt-get install -y openssh-client
+# Add Docker group and add rstudio user to it
+RUN groupadd docker && \
+    usermod -aG docker rstudio
+
+# Install dependencies needed for common R packages
+RUN apt-get update -y && \
+    apt-get install -y libgeos-dev libxt-dev cmake openssh-client
 
 USER rstudio
 
