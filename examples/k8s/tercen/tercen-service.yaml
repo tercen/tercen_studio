@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tercen-service
+spec:
+  selector:
+    app: tercen
+  ports:
+    - name: tercen
+      port: 5400
+    - name: tercen-grpc
+      port: 50051

@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchdb
+  labels:
+    app: couchdb
+spec:
+  ports:
+    - port: 5984
+  selector:
+    app: couchdb
+  clusterIP: None
+#  type: NodePort
+#  selector:
+#    app: couchdb
+#  ports:
+#    - port: 5984
+#      targetPort: 5984
+#      nodePort: 30084
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb
+  labels:
+    app: couchdb
+spec:
+  selector:
+    matchLabels:
+      app: couchdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: couchdb
+    spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: [ "sh", "-c", "chown -R 1001:1001 /opt/couchdb/data" ]
+          volumeMounts:
+            - mountPath: /opt/couchdb/data
+              name: couchdb-data
+              readOnly: false
+#      securityContext:
+#        runAsUser: 1001
+#        runAsGroup: 1001
+#        fsGroup: 1001
+      containers:
+        - image: ibmcom/couchdb3:3.1.1
+          name: couchdb
+          env:
+            - name: COUCHDB_USER
+              value: admin
+            - name: COUCHDB_PASSWORD
+              value: admin
+          ports:
+            - containerPort: 5984
+              name: couchdb
+          volumeMounts:
+            - name: couchdb-data
+              mountPath: /opt/couchdb/data
+              readOnly: false
+      volumes:
+        - name: couchdb-data
+          persistentVolumeClaim:
+            claimName: couchdb-pvc

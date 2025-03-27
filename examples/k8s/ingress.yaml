@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tercen-ingress
+spec:
+  rules:
+    - host: tercen.local  # Custom domain for testing
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tercen-service
+                port:
+                  number: 5400

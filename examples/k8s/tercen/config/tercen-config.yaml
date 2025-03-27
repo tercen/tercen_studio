@@ -1,0 +1,77 @@
+configs:
+  - domain: 'tercen'
+    hosts:
+      - tercen.local
+      - tercen-service
+      - 127.0.0.1
+      - 172.17.0.1
+    config:
+      tercen.public.uri: http://tercen.local
+      tercen.auth.cookie.domain: tercen.local
+      tercen.library.urls:
+        - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library.json
+        - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library-manual.json
+      tercen.auth.method: 'basic.auth'
+#      tercen.auth.method: 'saml,google'
+#      tercen.saml.request.issuer: stage.tercen.com
+#      tercen.saml.audience: stage.tercen.com
+#      tercen.saml.idp.issuer: https://auth.tercen.com/keycloak/auth/realms/tercen
+#      tercen.saml.binding.url: https://auth.tercen.com/keycloak/auth/realms/tercen/protocol/saml
+#      tercen.saml.certificate.file: /etc/tercen/sso/cert_auth_tercen_com_tercen.pem
+      client:
+        name: tercen
+        signup: 'true'
+        show.worker.admin: 'true'
+
+# ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
+tercen.log.level: '700'
+tercen.library.task.cron: '30 13,19 * * *' # This example triggers the workflow every day at 13:30 and 19:30 UTC:
+
+tercen.client.uri: http://tercen-service:5400
+tercen.worker.ip: tercen-service
+
+#tercen.allow.k8s.job: 'true'
+#tercen.allow.k8s.job.only.gpu: 'false'
+#tercen.k8s.job.node.affinity: 'minikube'
+#tercen.k8s.has.gpu.node: 'true'
+
+tercen.trusted.git:
+  - 'https://github.com/tercen/'
+
+tercen.trusted.docker:
+  - 'tercen'
+  - 'ghcr.io/tercen/'
+
+tercen.secret: "3ab70b11-d7b1-0000-958f-01b7ac4e9596"
+
+#tercen.auth.cookie.domain: stage.tercen.com
+tercen.allow.untrusted.git: 'false'
+tercen.allow.untrusted.docker: 'false'
+
+#tercen.sarno.ip: 'sarno-stage'
+
+tercen.test.password: test
+tercen.admin.password: admin
+tercen.worker.password: admin
+
+#tercen.user.sign.up: 'true'
+
+tercen.github.token: ghp_xxxxxxxx
+#tercen.smtp.username: info@xxxx.com
+#tercen.smtp.password: xxxx
+
+tercen.couchdb.address: couchdb
+tercen.couchdb.user: admin
+tercen.couchdb.password: admin
+
+#tercen.worker.isolates: "4"
+#tercen.ws.compression: "on"
+#tercen.worker.proc.override: 'true'
+#tercen.worker.proc.override.isolates.cpu.ratio: '2'
+
+#tercen.worker.memory.override: 'false'
+tercen.worker.memory: '62000000000' # 62GB over 64GB
+
+#tercen.r.operator.build: local
+
+
