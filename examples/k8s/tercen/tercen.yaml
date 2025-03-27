@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: tercen-pod
-          image: tercen/tercen:dev
+          image: tercen/tercen:0.16.10
           imagePullPolicy: Always
           resources:
             requests:
@@ -51,7 +51,7 @@ spec:
             - name: var-run
               mountPath: /var/run
         - name: sarno-prod
-          image: tercen/sarno:stage
+          image: tercen/sarno:0.4.3
           imagePullPolicy: Always
           command: [ "sarno" ]
           resources:
@@ -59,7 +59,7 @@ spec:
               cpu: "0.2"
           env:
             - name: TERCEN_PASSWORD
-              value: "TestMe42!"
+              value: "admin"
           volumeMounts:
             - name: var-lib-tercen-data
               mountPath: /var/lib/tercen/data/
