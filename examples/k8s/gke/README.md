@@ -83,17 +83,6 @@ gcloud container node-pools create worker-pool \
 ```shell
 gcloud compute accelerator-types list | grep $ZONE
 
-#We are testing the deployment of our product on a Google Kubernetes Engine (GKE) 
-#cluster in the europe-west1 region for a client who will perform a data analysis workflow 
-#primarily using TensorFlow. This deployment requires at least 4 NVIDIA T4 GPUs initially, 
-#with autoscaling capabilities to dynamically adjust GPU resources based on workload demand 
-#during testing. Our current GPU quota of 0 prevents us from provisioning GPU-enabled 
-#node pools with autoscaling in GKE, hindering our ability to validate performance and 
-#scalability for the client's production environment. Increasing our quota to 4 NVIDIA T4 GPUs 
-#will enable us to implement and test an autoscaling setup,
-# ensuring the solution efficiently handles variable data analysis loads before final delivery to the client.
- 
-
 gcloud container node-pools create gpu-pool \
   --cluster=$CLUSTER_NAME \
   --zone=$ZONE \
