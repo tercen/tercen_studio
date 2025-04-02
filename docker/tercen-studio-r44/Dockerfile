@@ -18,7 +18,8 @@ USER root
 RUN echo 'options("tercen.serviceUri"="http://tercen:5400/api/v1/")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.username"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
     echo 'options("tercen.password"="admin")' >> /usr/local/lib/R/etc/Rprofile.site && \
-    echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site
+    echo 'options(renv.consent = TRUE)' >> /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options(repos=c(TERCEN="https://cran.tercen.com/api/v1/rlib/tercen"))' >> /usr/local/lib/R/etc/Rprofile.site
 
 # Install Docker CLI
 RUN apt-get update -y &&  \
@@ -48,8 +49,6 @@ RUN mkdir -p /home/rstudio/.local/share/renv
 ENV RENV_VERSION v1.1.3
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cran.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-
-RUN echo 'options(repos=c(TERCEN="https://cran.tercen.com/api/v1/rlib/tercen"))' >> /usr/local/lib/R/etc/Rprofile.site¨
 RUN R -e "install.packages('tercen')"
 
 USER root
