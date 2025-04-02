@@ -85,7 +85,7 @@ services:
         aliases:
           - tercen_studio
     # image: tercen/tercen-studio-r40:4.0.4-7
-    image: tercen/tercen-studio-r44:4.4.3-3
+    image: tercen/tercen-studio-r44:4.4.3-6
     ports:
       - "8787:8787"
     environment:
