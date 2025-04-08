@@ -107,7 +107,7 @@ services:
 # install docker client
 # sudo /home/abc/setup-docker.sh
   code-server:
-    image: tercen/tercen-code-py39:3.9.17-3
+    image: tercen/tercen-code-py39:3.9.17-2
     container_name: code-server
     environment:
       - PUID=1001
