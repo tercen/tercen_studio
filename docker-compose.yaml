@@ -58,6 +58,7 @@ services:
   runtime-docker:
     privileged: true
     image: docker:24.0.6-dind-alpine3.18
+# Uncomment for enabling development with GPUs
 #    image: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04
 #    deploy:
 #      resources:
@@ -116,6 +117,14 @@ services:
     volumes:
       - code-server-data:/config
       - var-run:/var/run
+# Uncomment for enabling development with GPUs
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [ gpu ]    
     networks:
       tercen:
         aliases:
