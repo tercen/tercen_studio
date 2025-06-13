@@ -90,3 +90,5 @@ DefaultProfiles:
 #tercen.library.urls:
 #  - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library.json
 #  - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library-manual.json
+
+#tercen.library.task.cron: '30 13,19 * * *' # This example triggers the workflow every day at 13:30 and 19:30 UTC:
