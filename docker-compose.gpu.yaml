@@ -7,7 +7,7 @@
 #
 # Operators whose operator.json declares "capabilities": ["gpu"] are then run
 # with --gpus=all automatically. Validate with the smoke operator:
-#   https://github.com/fnaji/gpu_smoke_operator
+#   https://github.com/tercen/gpu_smoke_operator
 services:
   tercen-worker:
     deploy:

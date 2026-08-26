@@ -77,7 +77,7 @@ docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d
 Operators declaring `"capabilities": ["gpu"]` in `operator.json` are then run
 with `--gpus=all` automatically. Validated end-to-end 2026-08-26 (GCP T4). To
 verify a setup, install and run
-[gpu_smoke_operator](https://github.com/fnaji/gpu_smoke_operator) — it prints
+[gpu_smoke_operator](https://github.com/tercen/gpu_smoke_operator) — it prints
 the GPUs visible inside the operator container.
 
 # Notes
