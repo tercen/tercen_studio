@@ -65,6 +65,21 @@ docker compose down -v   # removes old volumes (couchdb data included!)
 docker compose up -d
 ```
 
+# GPU operator development
+
+With an NVIDIA GPU on the host (driver + `nvidia-container-toolkit` configured
+for docker), start the studio with the GPU overlay:
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d
+```
+
+Operators declaring `"capabilities": ["gpu"]` in `operator.json` are then run
+with `--gpus=all` automatically. Validated end-to-end 2026-08-26 (GCP T4). To
+verify a setup, install and run
+[gpu_smoke_operator](https://github.com/fnaji/gpu_smoke_operator) — it prints
+the GPUs visible inside the operator container.
+
 # Notes
 
 - The `tercen` and `tercen-worker` containers are `privileged`: they run

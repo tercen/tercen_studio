@@ -1,0 +1,22 @@
+# GPU enablement for operator execution. Requires on the HOST: an NVIDIA GPU,
+# the NVIDIA driver, and nvidia-container-toolkit configured for docker
+# (`sudo nvidia-ctk runtime configure --runtime=docker`).
+#
+# Start the studio with:
+#   docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d
+#
+# Operators whose operator.json declares "capabilities": ["gpu"] are then run
+# with --gpus=all automatically. Validate with the smoke operator:
+#   https://github.com/fnaji/gpu_smoke_operator
+services:
+  tercen-worker:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ./gpu/worker-gpu-setup.sh:/usr/local/bin/worker-gpu-setup.sh:ro
+    entrypoint: ["sh", "-c", "bash /usr/local/bin/worker-gpu-setup.sh; exec /usr/local/bin/podman-init.sh \"$@\"", "--"]
