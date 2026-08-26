@@ -42,3 +42,12 @@ tercen.worker.nodepools:
     capabilities: []
     minNodes: 1
     maxNodes: 1
+
+# These keys are read inside worker task isolates, which see the config FILE
+# but not environment-variable config — keep them here, not (only) in compose
+# env (symptom otherwise: GPU capability check dials /var/run/docker.sock).
+tercen.docker.socket: '/run/podman/podman.sock'
+tercen.podman.has.additional.image.store: 'false'
+tercen.gcs.mock: 'true'
+tercen.gcs.bucket: 'studio-bucket'
+tercen.gcs.mock.dir: '/var/lib/tercen/data/mock-gcs'
