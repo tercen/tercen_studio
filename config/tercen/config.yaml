@@ -2,93 +2,43 @@ configs:
   - domain: ''
     hosts:
       - 172.42.0.42
+      - 172.42.0.43
       - 127.0.0.1
+      - localhost
       - tercen
+      - tercen-worker
     config:
       tercen.auth.cookie.domain: 127.0.0.1
+      tercen.auth.method: 'basic.auth'
       client:
         name: tercen
         signup: 'true'
         show.worker.admin: 'true'
+
 # ALL 0 # OFF 2000 # FINEST 300 # FINER 400 # FINE 500 # CONFIG 700 # INFO 800 # WARNING 900 # SEVERE 1000 # SHOUT 1200
 tercen.log.level: '700'
-tercen.couchdb.address: couchdb
-tercen.couchdb.user: admin
-tercen.couchdb.password: admin
-
-tercen.sarno.ip: 'sarno'
-
-# upgrade from 0.15 to 0.16
-## run the following to track the upgrade process
-## docker compose logs -f tercen | grep UpgradeProcess16
-#tercen.update.task.size: 'true'
-#tercen.force.upgrade: 'true'
-#migration.buffer.size: '1000'
-
-# upgrade from 0.9.0 to 0.10.0
-# run.sarno.table.migration: 'true'
 
 tercen.client.uri: http://172.42.0.42:5400
-tercen.worker.ip: 172.42.0.42
-tercen.worker.runtime.ip: runtime-docker
 
-#tercen.mount.ssl.root.cert: 'true'
+# development convenience: allow installing/running any operator image / git repo
+tercen.allow.untrusted.docker: 'true'
+tercen.allow.untrusted.git: 'true'
 
-tercen.external.storage.enabled: 'true'
-## external.storage path must the same on the host and in the container
-#tercen.external.storage.read.path: '/var/lib/tercen/external/read'
-#tercen.external.storage.write.path: '/var/lib/tercen/external/write'
-
-# Google auth settings
-#tercen.auth.client.id.google: 'xxxxx.apps.googleusercontent.com'
-#tercen.auth.client.secret.google: 'xxxxx'
-
-#tercen.auth.method: 'saml'
-#tercen.saml.request.issuer: https://my.tercen.com/_service/sso/auth/saml
-#tercen.saml.idp.issuer: https://sts.windows.net/5b5c94c6-14cf-42da-85bc-4e08722b253b/
-#tercen.saml.audience: https://my.tercen.com/_service/sso/auth/saml
-#tercen.saml.binding.url: https://login.microsoftonline.com/5b5c94c6-14cf-42da-85bc-4e08722b253b/saml2
-#tercen.saml.certificate.file: /etc/tercen/saml/cert.pem
-
-# default true, accept any imag
-#tercen.allow.untrusted.docker: 'false'
-
-# accept any image name starting by tercen or my-trusted-docker-repo, ex. my-trusted-docker-repo/my-docker-image
+# accept only image names starting with these prefixes when the above is 'false'
 #tercen.trusted.docker:
 #  - 'tercen'
-#  - 'my-trusted-docker-repo'
+#  - 'ghcr.io/tercen/'
+#  - 'ghcr.io/pamgene/'
+#tercen.trusted.git:
+#  - 'https://github.com/tercen/'
+#  - 'https://github.com/pamgene/'
 
-#tercen.r.operator.reinstall: 'true'
-
-# will use all available cpu and memory
-tercen.worker.proc.override: 'true'
-tercen.worker.proc.override.isolates.cpu.ratio: '1.0'
-
-# manually set available worker threads and memory
-#tercen.worker.isolates: '4'
-# set 7G of available memory
-#tercen.worker.memory: '7096000000'
-
-DefaultProfiles:
-  - 2.api.profile
-  - 2.table.profile
-  - 2.cpuTime.profile
-  - 2.storage.profile
-  - 2.run.profile
-
-# LDAP
-#tercen.user.service: 'ldap'
-#tercen.user.service.ldap.host: '127.0.0.1'
-#tercen.user.service.ldap.protocol: ''
-#tercen.user.service.ldap.port: '389'
-## TLS
-## tercen.user.service.ldap.protocol: 'ssl'
-## tercen.user.service.ldap.port: '636'
-#
-#tercen.user.service.ldap.bind: 'dc=example,dc=org'
-
-#tercen.library.urls:
-#  - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library.json
-#  - https://raw.githubusercontent.com/tercen/app-library/master/tercen/library-manual.json
-
-#tercen.library.task.cron: '30 13,19 * * *' # This example triggers the workflow every day at 13:30 and 19:30 UTC:
+# worker pool definition (required for task cpu/memory booking since 0.17.60)
+tercen.worker.nodepools:
+  - name: worker
+    memoryPerNode: 8G
+    memoryThreshold: 1
+    cpusPerNode: 4
+    capabilities: []
+    minNodes: 1
+    maxNodes: 1

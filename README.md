@@ -1,156 +1,77 @@
-Run Tercen using Docker.
+# Tercen Studio
+
+A local Tercen development environment, running the same released images and
+architecture as production:
+
+| Service | Image | Role |
+|---|---|---|
+| `tercen` | `tercen/tercen:0.17.61` | main application — manages its own `sarno` table engine via internal podman |
+| `tercen-worker` | `tercen/tercen:0.17.61` | task execution — runs operator containers via its own internal podman |
+| `scheduler` | `tercen/ha-scheduler:0.34.7` | task dispatch |
+| `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | storage / queues |
+| `tercen-studio` | RStudio (R 4.4) | operator development |
+| `code-server` | VS Code (Python) | optional, `--profile python` |
 
 # Setup
-Install [docker-compose](https://docs.docker.com/compose/install/) for Linux or Windows or Mac.
 
+Install [docker-compose](https://docs.docker.com/compose/install/), then:
 
-Clone the following repository
 ```bash
 git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
+
+# optional but recommended: lets Tercen install operators from private
+# GitHub repositories and pull private ghcr.io images.
+# Use a CLASSIC personal access token with `repo` scope
+# (fine-grained github_pat_… tokens are not accepted by the git zipball endpoint).
+export GITHUB_TOKEN=ghp_your_token_here
+
+docker compose up -d
 ```
 
-Create tercen network
+- Tercen: [http://127.0.0.1:5402](http://127.0.0.1:5402) — admin / admin
+- RStudio: [http://127.0.0.1:8787](http://127.0.0.1:8787) — rstudio / tercen
+- VS Code (optional): `docker compose --profile python up -d` → [http://127.0.0.1:8443](http://127.0.0.1:8443)
 
-```shell
-docker network create tercen
-```
+# The operator dev loop
 
-Then start tercen ...
-
-```bash
-docker-compose up -d
-```
-
-Go to [http://127.0.0.1:5402](http://127.0.0.1:5402) to access Tercen.
-
-Username : admin
-
-Password : admin
-
-Go to [http://127.0.0.1:8787/](http://127.0.0.1:8787/) to access RStudio.
- 
-Username : rstudio
-
-Password : tercen
-
+1. In Tercen (`:5402`): create a project, import your CSV, add a data step and
+   set the crosstab projection.
+2. In RStudio (`:8787`): clone your operator, `renv::restore()`, and run
+   `main.R` in dev mode against that step — results are saved back to the step.
+3. Tercen can also install and run the operator for real (git install +
+   container execution), exactly like production — including private repos and
+   images when `GITHUB_TOKEN` is set.
 
 # Update
 
-```bash
-# stop tercen_studio
-docker-compose down        
-# get tercen_studio latest version           
-git pull
-docker-compose pull
-# start tercen_studio
-docker-compose up -d
-
-# check allocated worker threads and memory (see config.yaml for more settings)
-docker-compose logs tercen | grep tercen.worker.isolates
-docker-compose logs tercen | grep tercen.worker.memory
-``` 
- 
-# Uninstall
+Versions are pinned in `docker-compose.yaml` (`tercen/tercen`, `tercen/ha-scheduler`,
+`TERCEN_SARNO_IMAGE`). To update, bump those pins to the currently deployed
+production versions and:
 
 ```bash
-docker-compose down
-# check tercen docker volumes names
-docker volume ls
-# delete tercen docker volumes
-docker volume rm tercen_studio_couchdb3-data
-docker volume rm tercen_studio_tercen-data
-docker volume rm tercen_studio_tercen-studio-data
-docker volume rm tercen_studio_tercen-studio-renv
-```
-
-# Build
-
-```bash
-git tag tercen-studio-r35_3.5.3-1
-git push --tags
-
-git tag tercen-studio-r40_4.0.4-7
-git push --tags
-
-#docker build -t tercen/tercen-studio-flowsuite docker/tercen-studio-flowsuite
-git tag tercen-studio-flowsuite_3.15-6
-git push --tags
-
-docker run -it --rm -v /home/alex/dev/tercen/tercen_studio/:/root/mydevfolder tercen/docker_operator bash
-```
-
-# Logs
-
-```bash
-docker-compose logs tercen
-```
-
-Default log level is config(400) , log level configuration can be set in the file ./config/tercen/config.yaml.
-
-```yaml
-# tercen.log.level: '400'
-tercen.log.level: '0'
-```
-
-Then restart tercen
-
-```bash
-# stop tercen_studio
-docker compose down        
-# start tercen_studio
-docker compose up -d
-docker compose --version
-```
-
-# upgrade from 0.15 to 0.16
-
-Stop tercen.
-
-```shell
-docker compose down
-```
-
-Update git repository
-
-```shell
-git pull
-```
-
-Load new tercen docker images.
-
-```shell
 docker compose pull
-```
-
-Uncomment the following settings in the tercen config file.
-
-config/tercen/config.yaml
-
-```shell
-tercen.update.task.size: 'true'
-tercen.force.upgrade: 'true'
-migration.buffer.size: '1000'
-```
-
-Restart tercen.
-
-```shell
 docker compose up -d
 ```
 
-Run the following to track the upgrade process
+## Upgrading from the pre-0.17 studio
 
-```shell
-docker compose logs -f tercen | grep UpgradeProcess16
-# check for the following message
-# tercen_studio-tercen-1 | Main : 2025-02-21 12:19:36.850358 : 7 : CONFIG : UpgradeProcess16 : do_upgrade done
+The architecture changed (redis + scheduler + separate worker are new; the
+`sarno` and `runtime-docker` services are gone — both now run inside the
+tercen containers). Start fresh:
+
+```bash
+docker compose down -v   # removes old volumes (couchdb data included!)
+docker compose up -d
 ```
 
-Once the migration process is completed, following settings must be commented.
+# Notes
 
-```shell
-#tercen.update.task.size: 'true'
-#tercen.force.upgrade: 'true'
-#migration.buffer.size: '1000'
-```
+- The `tercen` and `tercen-worker` containers are `privileged`: they run
+  podman inside to manage sarno and operator containers (same as production
+  pods).
+- Operator/table data lives in the `tercen-data` volume, shared between main
+  and worker.
+- GPU development: see `docker/` and the commented nvidia sections of previous
+  revisions; the `code-server`/RStudio images can be swapped for the GPU
+  variants.

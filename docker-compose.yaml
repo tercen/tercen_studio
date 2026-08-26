@@ -1,4 +1,15 @@
-#version: "3.9"
+# Tercen Studio — a local Tercen development environment.
+#
+# Architecture (mirrors production):
+#   couchdb + redis + scheduler  -> infrastructure
+#   tercen                       -> main application (manages its own sarno
+#                                   table-engine container via internal podman)
+#   tercen-worker                -> task execution; runs operator containers
+#                                   via its own internal podman (no dind needed)
+#   tercen-studio                -> RStudio for operator development
+#
+# Optional (start with: docker compose --profile python up -d):
+#   code-server                  -> VS Code for Python operator development
 
 networks:
   tercen:
@@ -14,12 +25,49 @@ services:
       tercen:
         aliases:
           - couchdb
-    image: ibmcom/couchdb3:3.1.1
+    image: couchdb:3.5.1
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=admin
     volumes:
       - couchdb3-data:/opt/couchdb/data
+      - ./config/couchdb/local.ini:/opt/couchdb/etc/local.d/local.ini
+    restart: always
+
+  redis:
+    networks:
+      tercen:
+        aliases:
+          - redis
+    image: redis:7-alpine
+    command: ["redis-server", "--requirepass", "admin", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "admin", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: always
+
+  scheduler:
+    networks:
+      tercen:
+        aliases:
+          - scheduler
+    image: tercen/ha-scheduler:0.34.7
+    # the image's built-in healthcheck uses pgrep, which the image lacks
+    healthcheck:
+      disable: true
+    environment:
+      - RUST_LOG=info,sci_ha_scheduler_rust=info
+      - REDIS_SENTINELS=redis:6379
+      - REDIS_SERVICE_NAME=redis
+      - REDIS_PASSWORD=admin
+      - GRPC_PORT=50051
+    depends_on:
+      redis:
+        condition: service_healthy
     restart: always
 
   tercen:
@@ -28,72 +76,99 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.16.10
-#    image: tercen/tercen:stage
+    image: tercen/tercen:0.17.61
+    privileged: true
+    depends_on:
+      - couchdb
+      - redis
+      - scheduler
     ports:
       - "5402:5400"
-#      - "50051:50051"
+    environment:
+      - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
+      - TERCEN_ADMIN_PASSWORD=admin
+      - TERCEN_COUCHDB_ADDRESS=couchdb
+      - TERCEN_COUCHDB_USER=admin
+      - TERCEN_COUCHDB_PASSWORD=admin
+      - TERCEN_REDIS_HOST=redis
+      - TERCEN_REDIS_PORT=6379
+      - TERCEN_REDIS_PASSWORD=admin
+      - TERCEN_SCHEDULER_HOST=scheduler
+      - TERCEN_SCHEDULER_PORT=50051
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:0.6.3
+      - tercen.podman.has.additional.image.store=false
+      - tercen.docker.socket=/run/podman/podman.sock
+      - TERCEN_WORKER_MEMORY_RESERVATION=250000000
+      # GitHub token for installing operators from private repositories
+      # (classic PAT with repo scope). Export it before docker compose up.
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - REGISTRY_AUTH_FILE=/root/.config/containers/auth.json
+      - tercen.gcs.mock=true
+      - tercen.gcs.bucket=studio-bucket
+      - tercen.gcs.mock.dir=/var/lib/tercen/data/mock-gcs
     volumes:
-      - /var/lib/tercen/external:/var/lib/tercen/external
-      - tercen-data:/var/lib/tercen/data
       - ./config/tercen:/etc/tercen
-      - var-run:/var/run
-      - tmp:/tmp
-#      - ~/.docker/config.json:/root/.docker/config.json:ro
+      - tercen-data:/var/lib/tercen/data
+      - tercen-podman-share:/home/podman/.local/share/containers
+    entrypoint: ["sh", "-c", "mkdir -p /root/.config/containers && chmod 755 /root /root/.config /root/.config/containers; exec /usr/local/bin/podman-init.sh \"$@\"", "--"]
+    command: ["sh", "-c", "CONTAINER_HOST=unix:///run/podman/podman.sock podman rm -f sarno >/dev/null 2>&1 || true; exec /app/bin/tercen"]
     restart: always
 
-  sarno:
+  tercen-worker:
     networks:
       tercen:
+        ipv4_address: 172.42.0.43
         aliases:
-          - sarno
-    image: tercen/sarno:0.4.3
-#    image: tercen/sarno:stage
-    volumes:
-      - tercen-data:/var/lib/tercen/data
-      - tmp:/tmp
-      - ./config/sarno/sarno.toml:/root/.config/sarno/sarno.toml
-    restart: always
-
-  runtime-docker:
+          - tercen-worker
+    image: tercen/tercen:0.17.61
     privileged: true
-    image: docker:24.0.6-dind-alpine3.18
-# Uncomment for enabling development with GPUs
-#    image: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#            - driver: nvidia
-#              count: 1
-#              capabilities: [ gpu ]
-    networks:
-      tercen:
-        aliases:
-          - runtime-docker
+    depends_on:
+      - tercen
+    environment:
+      # worker mode (dotted names are real config keys, same as production)
+      - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
+      - tercen.is.worker=true
+      - tercen.worker.name=worker-8
+      - tercen.worker.deployment=worker-8
+      - tercen.worker.ip=172.42.0.43
+      - tercen.worker.cpu=4
+      - tercen.podman.has.additional.image.store=false
+      - tercen.docker.socket=/run/podman/podman.sock
+      - tercen.worker.isolates=4
+      - tercen.main.host=tercen
+      - TERCEN_REDIS_HOST=redis
+      - TERCEN_REDIS_PORT=6379
+      - TERCEN_REDIS_PASSWORD=admin
+      - TERCEN_COUCHDB_ADDRESS=couchdb
+      - TERCEN_COUCHDB_USER=admin
+      - TERCEN_COUCHDB_PASSWORD=admin
+      - TERCEN_SCHEDULER_HOST=scheduler
+      - TERCEN_SCHEDULER_PORT=50051
+      - TERCEN_WORKER_MEMORY_RESERVATION=250000000
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - REGISTRY_AUTH_FILE=/root/.config/containers/auth.json
+      - tercen.gcs.mock=true
+      - tercen.gcs.bucket=studio-bucket
+      - tercen.gcs.mock.dir=/var/lib/tercen/data/mock-gcs
     volumes:
-#      - /etc/ssl/certs:/etc/ssl/certs:ro
-      - var-run:/var/run
-      - var-lib-docker:/var/lib/docker
+      - ./config/tercen:/etc/tercen
       - tercen-data:/var/lib/tercen/data
-      - /var/lib/tercen/external:/var/lib/tercen/external
-      - tmp:/tmp
+      - worker-podman-share:/home/podman/.local/share/containers
+    entrypoint: ["sh", "-c", "mkdir -p /root/.config/containers && chmod 755 /root /root/.config /root/.config/containers; exec /usr/local/bin/podman-init.sh \"$@\"", "--"]
+    command: ["sh", "-c", "CONTAINER_HOST=unix:///run/podman/podman.sock podman rm -f sarno >/dev/null 2>&1 || true; exec /app/bin/tercen"]
     restart: always
 
-  tercen_studio:
+  tercen-studio:
     networks:
       tercen:
         aliases:
-          - tercen_studio
-    # image: tercen/tercen-studio-r40:4.0.4-7
+          - tercen-studio
     image: tercen/tercen-studio-r44:4.4.3-7
     ports:
       - "8787:8787"
     environment:
       - PASSWORD=tercen
     volumes:
-      - var-run:/var/run
-      - /var/lib/tercen/share:/var/lib/tercen/share
       - tercen-studio-renv:/home/rstudio/.local/share/renv
       - tercen-studio-data:/home/rstudio/projects
       - ./config/tercen-studio/.Rprofile:/home/rstudio/.Rprofile
@@ -103,10 +178,8 @@ services:
 #      - ~/.gitconfig:/home/rstudio/.gitconfig
     restart: always
 
-
-# install docker client
-# sudo /home/abc/setup-docker.sh
   code-server:
+    profiles: ["python"]
     image: tercen/tercen-code-py39:3.9.17-2
     container_name: code-server
     environment:
@@ -116,15 +189,6 @@ services:
       - SUDO_PASSWORD=tercen
     volumes:
       - code-server-data:/config
-      - var-run:/var/run
-# Uncomment for enabling development with GPUs
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#            - driver: nvidia
-#              count: 1
-#              capabilities: [ gpu ]    
     networks:
       tercen:
         aliases:
@@ -135,10 +199,10 @@ services:
 
 volumes:
   couchdb3-data:
+  redis-data:
   code-server-data:
   tercen-data:
   tercen-studio-data:
   tercen-studio-renv:
-  var-lib-docker:
-  var-run:
-  tmp:
+  tercen-podman-share:
+  worker-podman-share:
