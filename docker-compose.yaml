@@ -127,6 +127,7 @@ services:
     environment:
       # worker mode (dotted names are real config keys, same as production)
       - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:0.6.3
       - tercen.is.worker=true
       - tercen.worker.name=worker-8
       - tercen.worker.deployment=worker-8
