@@ -30,7 +30,13 @@ jobs:
           def api(path):
               out = subprocess.run(
                   ["gh", "api", f"repos/${{ github.repository }}/{path}"],
-                  capture_output=True, text=True, check=True)
+                  capture_output=True, text=True)
+              if out.returncode != 0:
+                  raise SystemExit(
+                      f"traffic API failed for {path}: {out.stderr.strip()}\n"
+                      "The Actions GITHUB_TOKEN cannot read traffic stats. Set a\n"
+                      "TRAFFIC_TOKEN repo secret: a fine-grained PAT for this repo\n"
+                      "with Administration:read (or a classic PAT with repo scope).")
               return json.loads(out.stdout)
 
           def merge(kind):
