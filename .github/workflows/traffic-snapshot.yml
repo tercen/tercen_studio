@@ -4,7 +4,8 @@ name: Traffic snapshot
 # weekly into traffic/*.csv so we keep a permanent trend line.
 # The default GITHUB_TOKEN has push access to this repo, which the traffic
 # API requires. If it ever 403s, create a classic PAT with `repo` scope,
-# store it as the TRAFFIC_TOKEN secret, and it will be used instead.
+# store it as the TRAFFIC_TOKEN secret. Falls back to the org-wide
+# TERCEN_GITHUB_TOKEN (classic, repo scope), then GITHUB_TOKEN.
 
 on:
   schedule:
@@ -21,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fetch and merge traffic data
         env:
-          GH_TOKEN: ${{ secrets.TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.TRAFFIC_TOKEN || secrets.TERCEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           python3 - <<'PY'
           import json, os, subprocess, csv
