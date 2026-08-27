@@ -1,0 +1,64 @@
+name: Traffic snapshot
+
+# GitHub's traffic stats are a rolling 14-day window — this archives them
+# weekly into traffic/*.csv so we keep a permanent trend line.
+# The default GITHUB_TOKEN has push access to this repo, which the traffic
+# API requires. If it ever 403s, create a classic PAT with `repo` scope,
+# store it as the TRAFFIC_TOKEN secret, and it will be used instead.
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'   # Mondays 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and merge traffic data
+        env:
+          GH_TOKEN: ${{ secrets.TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, csv
+
+          def api(path):
+              out = subprocess.run(
+                  ["gh", "api", f"repos/${{ github.repository }}/{path}"],
+                  capture_output=True, text=True, check=True)
+              return json.loads(out.stdout)
+
+          def merge(kind):
+              data = api(f"traffic/{kind}")[kind]
+              path = f"traffic/{kind}.csv"
+              rows = {}
+              if os.path.exists(path):
+                  with open(path) as f:
+                      for r in csv.DictReader(f):
+                          rows[r["date"]] = r
+              for d in data:
+                  date = d["timestamp"][:10]
+                  # last day of the window may still grow; always overwrite
+                  rows[date] = {"date": date,
+                                "count": str(d["count"]),
+                                "uniques": str(d["uniques"])}
+              with open(path, "w", newline="") as f:
+                  w = csv.DictWriter(f, fieldnames=["date", "count", "uniques"])
+                  w.writeheader()
+                  for date in sorted(rows):
+                      w.writerow(rows[date])
+
+          merge("clones")
+          merge("views")
+          PY
+      - name: Commit if changed
+        run: |
+          git config user.name "traffic-snapshot[bot]"
+          git config user.email "noreply@tercen.com"
+          git add traffic/
+          git diff --cached --quiet || git commit -m "traffic snapshot $(date -u +%F)"
+          git push
