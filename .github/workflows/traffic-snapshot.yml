@@ -26,6 +26,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, os, subprocess, csv
+          os.makedirs("traffic", exist_ok=True)
 
           def api(path):
               out = subprocess.run(
