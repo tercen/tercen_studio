@@ -82,6 +82,10 @@ the GPUs visible inside the operator container.
 
 # Notes
 
+- The Tercen web UI ships with the same anonymous usage analytics as
+  tercen.com (Google Tag Manager). It fires only when the UI is opened in a
+  browser; block `googletagmanager.com` (or use any ad-blocker) to opt out.
+
 - The `tercen` and `tercen-worker` containers are `privileged`: they run
   podman inside to manage sarno and operator containers (same as production
   pods).
