@@ -20,6 +20,34 @@ networks:
 
 services:
 
+  postgres:
+    networks:
+      tercen:
+        aliases:
+          - postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=tercen
+      - POSTGRES_PASSWORD=tercen
+      - POSTGRES_DB=tercen
+    # prod tunings that mattered for #1206 — scaled down for a laptop
+    command:
+      - postgres
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - work_mem=24MB
+      - -c
+      - effective_cache_size=1536MB
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tercen -d tercen"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
   couchdb:
     networks:
       tercen:
@@ -55,7 +83,7 @@ services:
       tercen:
         aliases:
           - scheduler
-    image: tercen/ha-scheduler:0.34.7
+    image: tercen/ha-scheduler:0.34.8
     # the image's built-in healthcheck uses pgrep, which the image lacks
     healthcheck:
       disable: true
@@ -76,17 +104,30 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:0.17.61
+    image: tercen/tercen:1.0.14
     privileged: true
     depends_on:
-      - couchdb
-      - redis
-      - scheduler
+      postgres:
+        condition: service_healthy
+      couchdb:
+        condition: service_started
+      redis:
+        condition: service_started
+      scheduler:
+        condition: service_started
     ports:
       - "5402:5400"
     environment:
       - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
       - TERCEN_ADMIN_PASSWORD=admin
+      - TERCEN_DB_BACKEND=postgres
+      - tercen.pg.host=postgres
+      - tercen.pg.port=5432
+      - tercen.pg.database=tercen
+      - tercen.pg.user=tercen
+      - tercen.pg.password=tercen
+      - tercen.pg.pool.size=10
+      - tercen.blob.cache.enabled=true
       - TERCEN_COUCHDB_ADDRESS=couchdb
       - TERCEN_COUCHDB_USER=admin
       - TERCEN_COUCHDB_PASSWORD=admin
@@ -95,7 +136,7 @@ services:
       - TERCEN_REDIS_PASSWORD=admin
       - TERCEN_SCHEDULER_HOST=scheduler
       - TERCEN_SCHEDULER_PORT=50051
-      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:0.6.3
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:v1.0.0-blobcache-dev6
       - tercen.podman.has.additional.image.store=false
       - tercen.docker.socket=/run/podman/podman.sock
       - TERCEN_WORKER_MEMORY_RESERVATION=250000000
@@ -120,14 +161,14 @@ services:
         ipv4_address: 172.42.0.43
         aliases:
           - tercen-worker
-    image: tercen/tercen:0.17.61
+    image: tercen/tercen:1.0.14
     privileged: true
     depends_on:
       - tercen
     environment:
       # worker mode (dotted names are real config keys, same as production)
       - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
-      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:0.6.3
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:v1.0.0-blobcache-dev6
       - tercen.is.worker=true
       - tercen.worker.name=worker-8
       - tercen.worker.deployment=worker-8
@@ -140,6 +181,14 @@ services:
       - TERCEN_REDIS_HOST=redis
       - TERCEN_REDIS_PORT=6379
       - TERCEN_REDIS_PASSWORD=admin
+      - TERCEN_DB_BACKEND=postgres
+      - tercen.pg.host=postgres
+      - tercen.pg.port=5432
+      - tercen.pg.database=tercen
+      - tercen.pg.user=tercen
+      - tercen.pg.password=tercen
+      - tercen.pg.pool.size=10
+      - tercen.blob.cache.enabled=true
       - TERCEN_COUCHDB_ADDRESS=couchdb
       - TERCEN_COUCHDB_USER=admin
       - TERCEN_COUCHDB_PASSWORD=admin
@@ -199,6 +248,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  postgres-data:
   couchdb3-data:
   redis-data:
   code-server-data:

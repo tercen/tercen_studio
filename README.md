@@ -5,10 +5,11 @@ architecture as production:
 
 | Service | Image | Role |
 |---|---|---|
-| `tercen` | `tercen/tercen:0.17.61` | main application — manages its own `sarno` table engine via internal podman |
-| `tercen-worker` | `tercen/tercen:0.17.61` | task execution — runs operator containers via its own internal podman |
-| `scheduler` | `tercen/ha-scheduler:0.34.7` | task dispatch |
-| `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | storage / queues |
+| `tercen` | `tercen/tercen:1.0.14` | main application — manages its own `sarno` table engine via internal podman |
+| `tercen-worker` | `tercen/tercen:1.0.14` | task execution — runs operator containers via its own internal podman |
+| `scheduler` | `tercen/ha-scheduler:0.34.8` | task dispatch |
+| `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
+| `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | legacy storage, kept as production does / queues |
 | `tercen-studio` | RStudio (R 4.4) | operator development |
 | `code-server` | VS Code (Python) | optional, `--profile python` |
 
@@ -61,7 +62,7 @@ The architecture changed (redis + scheduler + separate worker are new; the
 tercen containers). Start fresh:
 
 ```bash
-docker compose down -v   # removes old volumes (couchdb data included!)
+docker compose down -v   # removes old volumes (postgres + couchdb data included!)
 docker compose up -d
 ```
 
