@@ -83,7 +83,7 @@ services:
       tercen:
         aliases:
           - scheduler
-    image: tercen/ha-scheduler:0.34.8
+    image: tercen/ha-scheduler:0.34.9
     # the image's built-in healthcheck uses pgrep, which the image lacks
     healthcheck:
       disable: true
@@ -104,7 +104,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:1.0.14
+    image: tercen/tercen:1.0.26
     privileged: true
     depends_on:
       postgres:
@@ -161,7 +161,7 @@ services:
         ipv4_address: 172.42.0.43
         aliases:
           - tercen-worker
-    image: tercen/tercen:1.0.14
+    image: tercen/tercen:1.0.26
     privileged: true
     depends_on:
       - tercen
