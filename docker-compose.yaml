@@ -104,7 +104,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:1.0.26
+    image: tercen/tercen:1.1.4
     privileged: true
     depends_on:
       postgres:
@@ -161,7 +161,7 @@ services:
         ipv4_address: 172.42.0.43
         aliases:
           - tercen-worker
-    image: tercen/tercen:1.0.26
+    image: tercen/tercen:1.1.4
     privileged: true
     depends_on:
       - tercen
