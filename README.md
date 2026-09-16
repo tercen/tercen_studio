@@ -8,6 +8,7 @@ architecture as production:
 | `tercen` | `tercen/tercen:1.1.4` | main application — manages its own `sarno` table engine via internal podman |
 | `tercen-worker` | `tercen/tercen:1.1.4` | task execution — runs operator containers via its own internal podman |
 | `scheduler` | `tercen/ha-scheduler:0.34.9` | task dispatch |
+| `sarno` | `tercen/sarno:1.2.4` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
 | `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
 | `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | legacy storage, kept as production does / queues |
 | `tercen-studio` | RStudio (R 4.4) | operator development |
@@ -49,6 +50,11 @@ docker compose up -d
 Versions are pinned in `docker-compose.yaml` (`tercen/tercen`, `tercen/ha-scheduler`,
 `TERCEN_SARNO_IMAGE`). To update, bump those pins to the currently deployed
 production versions and:
+
+Production's own pins are the source of truth: `tercen` and `ha-scheduler` are
+the image tags on the `tercen-prod` deployments, and sarno is
+`tercen.sarno.image` in the `tercen-config` ConfigMap — it is a config value,
+not a pod image, so it does not show up in a `kubectl get deploy` listing.
 
 ```bash
 docker compose pull
