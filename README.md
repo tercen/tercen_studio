@@ -35,6 +35,18 @@ docker compose up -d
 - RStudio (optional): `docker compose --profile rstudio up -d` → [http://127.0.0.1:8787](http://127.0.0.1:8787) — rstudio / tercen
 - VS Code (optional): `docker compose --profile python up -d` → [http://127.0.0.1:8443](http://127.0.0.1:8443)
 
+Ports bind to **127.0.0.1 only**. The studio has a fixed admin/admin login and
+runs an older RStudio, so it should not be reachable from the network by
+default. To expose it deliberately — a shared dev box, or a GPU VM you reach
+over SSH — set `BIND_ADDR`:
+
+```bash
+BIND_ADDR=0.0.0.0 docker compose up -d   # or a specific interface address
+```
+
+Prefer an SSH tunnel (`ssh -L 5402:127.0.0.1:5402 <host>`) over `0.0.0.0` where
+you can.
+
 # The operator dev loop
 
 1. In Tercen (`:5402`): create a project, import your CSV, add a data step and

@@ -116,7 +116,7 @@ services:
       scheduler:
         condition: service_started
     ports:
-      - "5402:5400"
+      - "${BIND_ADDR:-127.0.0.1}:5402:5400"
     environment:
       - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
       - TERCEN_ADMIN_PASSWORD=admin
@@ -220,7 +220,7 @@ services:
     # here are not bit-identical to CI. Prototype in the operator's own image.
     profiles: [rstudio]
     ports:
-      - "8787:8787"
+      - "${BIND_ADDR:-127.0.0.1}:8787:8787"
     environment:
       - PASSWORD=tercen
     volumes:
@@ -249,7 +249,7 @@ services:
         aliases:
           - code-server
     ports:
-      - "8443:8443"
+      - "${BIND_ADDR:-127.0.0.1}:8443:8443"
     restart: unless-stopped
 
 volumes:
