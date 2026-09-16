@@ -11,7 +11,7 @@ architecture as production:
 | `sarno` | `tercen/sarno:1.2.4` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
 | `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
 | `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | legacy storage, kept as production does / queues |
-| `tercen-studio` | RStudio (R 4.4) | operator development |
+| `tercen-studio` | RStudio (R 4.4) | **opt-in**, `--profile rstudio` — see [RStudio is no longer in the default stack](#rstudio-is-no-longer-in-the-default-stack) |
 | `code-server` | VS Code (Python) | optional, `--profile python` |
 
 # Setup
@@ -32,18 +32,47 @@ docker compose up -d
 ```
 
 - Tercen: [http://127.0.0.1:5402](http://127.0.0.1:5402) — admin / admin
-- RStudio: [http://127.0.0.1:8787](http://127.0.0.1:8787) — rstudio / tercen
+- RStudio (optional): `docker compose --profile rstudio up -d` → [http://127.0.0.1:8787](http://127.0.0.1:8787) — rstudio / tercen
 - VS Code (optional): `docker compose --profile python up -d` → [http://127.0.0.1:8443](http://127.0.0.1:8443)
 
 # The operator dev loop
 
 1. In Tercen (`:5402`): create a project, import your CSV, add a data step and
    set the crosstab projection.
-2. In RStudio (`:8787`): clone your operator, `renv::restore()`, and run
-   `main.R` in dev mode against that step — results are saved back to the step.
+2. Iterate on `main.R` in **the operator's own image** — the environment CI and
+   production actually use:
+
+   ```bash
+   docker run --rm -v "$PWD:/operator" -w /operator \
+     --network tercen_studio_tercen \
+     tercen/runtime-r44-minimal:4.4.3-2 \
+     R --no-save -f main.R --args --taskId=<id> --serviceUri=http://tercen:5400/api/v1/
+   ```
 3. Tercen can also install and run the operator for real (git install +
    container execution), exactly like production — including private repos and
    images when `GITHUB_TOKEN` is set.
+
+# RStudio is no longer in the default stack
+
+`docker compose up -d` no longer starts RStudio. It is still available behind
+`--profile rstudio`, but it should not be used to produce results that are
+compared against CI.
+
+Its R is 4.4.3 — the same *version* operators use — but nothing else matches:
+
+| | RStudio | `runtime-r44-minimal` (operator Tier 1/2) |
+|---|---|---|
+| OS / libc | Ubuntu 24.04, glibc | Alpine, **musl** |
+| BLAS/LAPACK | OpenBLAS 0.3.26 | **reference `libRlapack`** |
+| Packages | 190 | 36 |
+
+OpenBLAS and reference LAPACK do not agree bit-for-bit on `svd`, `lm`, `prcomp`
+or matrix multiplication. The differences are small, and exactly large enough to
+break an exact-match golden test — so the one job RStudio was kept for,
+generating expected output, is the job it is least suited to.
+
+Prototype and generate golden output in the operator's own image instead: that
+is CI-exact by construction rather than by resemblance.
 
 # Update
 

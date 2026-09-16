@@ -214,6 +214,11 @@ services:
         aliases:
           - tercen-studio
     image: tercen/tercen-studio-r44:4.4.3-7
+    # Opt-in only: docker compose --profile rstudio up -d
+    # Its R is 4.4.3 but Ubuntu/glibc + OpenBLAS, while operators build on
+    # runtime-r44-minimal (Alpine/musl + reference LAPACK), so results computed
+    # here are not bit-identical to CI. Prototype in the operator's own image.
+    profiles: [rstudio]
     ports:
       - "8787:8787"
     environment:
