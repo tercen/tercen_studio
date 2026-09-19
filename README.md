@@ -5,10 +5,10 @@ architecture as production:
 
 | Service | Image | Role |
 |---|---|---|
-| `tercen` | `tercen/tercen:1.1.4` | main application — manages its own `sarno` table engine via internal podman |
-| `tercen-worker` | `tercen/tercen:1.1.4` | task execution — runs operator containers via its own internal podman |
+| `tercen` | `tercen/tercen:1.1.8` | main application — manages its own `sarno` table engine via internal podman |
+| `tercen-worker` | `tercen/tercen:1.1.8` | task execution — runs operator containers via its own internal podman |
 | `scheduler` | `tercen/ha-scheduler:0.34.9` | task dispatch |
-| `sarno` | `tercen/sarno:1.2.4` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
+| `sarno` | `tercen/sarno:1.2.5` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
 | `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
 | `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | legacy storage, kept as production does / queues |
 | `tercen-studio` | RStudio (R 4.4) | **opt-in**, `--profile rstudio` — see [RStudio is no longer in the default stack](#rstudio-is-no-longer-in-the-default-stack) |

@@ -104,7 +104,7 @@ services:
         ipv4_address: 172.42.0.42
         aliases:
           - tercen
-    image: tercen/tercen:1.1.4
+    image: tercen/tercen:1.1.8
     privileged: true
     depends_on:
       postgres:
@@ -136,7 +136,7 @@ services:
       - TERCEN_REDIS_PASSWORD=admin
       - TERCEN_SCHEDULER_HOST=scheduler
       - TERCEN_SCHEDULER_PORT=50051
-      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:1.2.4
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:1.2.5
       - tercen.podman.has.additional.image.store=false
       - tercen.docker.socket=/run/podman/podman.sock
       - TERCEN_WORKER_MEMORY_RESERVATION=250000000
@@ -161,14 +161,14 @@ services:
         ipv4_address: 172.42.0.43
         aliases:
           - tercen-worker
-    image: tercen/tercen:1.1.4
+    image: tercen/tercen:1.1.8
     privileged: true
     depends_on:
       - tercen
     environment:
       # worker mode (dotted names are real config keys, same as production)
       - TERCEN_PUBLIC_URI=http://127.0.0.1:5402
-      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:1.2.4
+      - TERCEN_SARNO_IMAGE=docker.io/tercen/sarno:1.2.5
       - tercen.is.worker=true
       - tercen.worker.name=worker-8
       - tercen.worker.deployment=worker-8
