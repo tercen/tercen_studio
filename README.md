@@ -10,7 +10,7 @@ architecture as production:
 | `scheduler` | `tercen/ha-scheduler:0.34.9` | task dispatch |
 | `sarno` | `tercen/sarno:1.2.5` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
 | `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
-| `couchdb` / `redis` | `couchdb:3.5.1` / `redis:7` | legacy storage, kept as production does / queues |
+| `redis` | `redis:7-alpine` | queues and caching |
 | `tercen-studio` | RStudio (R 4.4) | **opt-in**, `--profile rstudio` — see [RStudio is no longer in the default stack](#rstudio-is-no-longer-in-the-default-stack) |
 | `code-server` | VS Code (Python) | optional, `--profile python` |
 
@@ -109,7 +109,7 @@ The architecture changed (redis + scheduler + separate worker are new; the
 tercen containers). Start fresh:
 
 ```bash
-docker compose down -v   # removes old volumes (postgres + couchdb data included!)
+docker compose down -v   # removes old volumes (postgres data included!)
 docker compose up -d
 ```
 

@@ -1,7 +1,7 @@
 # Tercen Studio — a local Tercen development environment.
 #
 # Architecture (mirrors production):
-#   couchdb + redis + scheduler  -> infrastructure
+#   postgres + redis + scheduler -> infrastructure
 #   tercen                       -> main application (manages its own sarno
 #                                   table-engine container via internal podman)
 #   tercen-worker                -> task execution; runs operator containers
@@ -46,20 +46,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
-    restart: always
-
-  couchdb:
-    networks:
-      tercen:
-        aliases:
-          - couchdb
-    image: couchdb:3.5.1
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
-    volumes:
-      - couchdb3-data:/opt/couchdb/data
-      - ./config/couchdb/local.ini:/opt/couchdb/etc/local.d/local.ini
     restart: always
 
   redis:
@@ -109,8 +95,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      couchdb:
-        condition: service_started
       redis:
         condition: service_started
       scheduler:
@@ -128,9 +112,6 @@ services:
       - tercen.pg.password=tercen
       - tercen.pg.pool.size=10
       - tercen.blob.cache.enabled=true
-      - TERCEN_COUCHDB_ADDRESS=couchdb
-      - TERCEN_COUCHDB_USER=admin
-      - TERCEN_COUCHDB_PASSWORD=admin
       - TERCEN_REDIS_HOST=redis
       - TERCEN_REDIS_PORT=6379
       - TERCEN_REDIS_PASSWORD=admin
@@ -189,9 +170,6 @@ services:
       - tercen.pg.password=tercen
       - tercen.pg.pool.size=10
       - tercen.blob.cache.enabled=true
-      - TERCEN_COUCHDB_ADDRESS=couchdb
-      - TERCEN_COUCHDB_USER=admin
-      - TERCEN_COUCHDB_PASSWORD=admin
       - TERCEN_SCHEDULER_HOST=scheduler
       - TERCEN_SCHEDULER_PORT=50051
       - TERCEN_WORKER_MEMORY_RESERVATION=250000000
