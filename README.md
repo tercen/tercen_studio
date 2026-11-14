@@ -5,10 +5,10 @@ architecture as production:
 
 | Service | Image | Role |
 |---|---|---|
-| `tercen` | `tercen/tercen:1.1.8` | main application — manages its own `sarno` table engine via internal podman |
-| `tercen-worker` | `tercen/tercen:1.1.8` | task execution — runs operator containers via its own internal podman |
+| `tercen` | `tercen/tercen:1.1.15` | main application — manages its own `sarno` table engine via internal podman |
+| `tercen-worker` | `tercen/tercen:1.1.15` | task execution — runs operator containers via its own internal podman |
 | `scheduler` | `tercen/ha-scheduler:0.34.9` | task dispatch |
-| `sarno` | `tercen/sarno:1.2.5` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
+| `sarno` | `tercen/sarno:1.2.7` | table engine — not a compose service; `tercen` starts it in its own podman, pinned by `TERCEN_SARNO_IMAGE` |
 | `postgres` | `postgres:16` | document storage (the production backend since the 1.0 line) |
 | `redis` | `redis:7-alpine` | queues and caching |
 | `tercen-studio` | RStudio (R 4.4) | **opt-in**, `--profile rstudio` — see [RStudio is no longer in the default stack](#rstudio-is-no-longer-in-the-default-stack) |
@@ -142,3 +142,20 @@ the GPUs visible inside the operator container.
 - GPU development: see `docker/` and the commented nvidia sections of previous
   revisions; the `code-server`/RStudio images can be swapped for the GPU
   variants.
+
+## Studio crash-loops after the host rebooted
+
+Symptom: `tercen` and `tercen-worker` restart over and over, and the log ends with
+`[podman-init] ERROR: Podman socket verification failed`. Podman's own log in the
+container (`/tmp/podman-system-service.log`) says "current system boot ID differs
+from cached boot ID; an unhandled reboot has occurred".
+
+Podman keeps boot-scoped state in `/run`. Before `/run` was a tmpfs in
+`docker-compose.yaml`, it lived on the container's writable layer, which
+`restart: always` keeps across a host reboot. The compose file now mounts a tmpfs
+there. A stack created from an older compose file needs its two containers
+recreated once. Your data is in volumes and is kept:
+
+```bash
+docker compose up -d --force-recreate --no-deps tercen tercen-worker
+```
